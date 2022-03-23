@@ -8,13 +8,13 @@ namespace DevBank
     {
 
         public string Nome { get; set; }
-        public string CPF { get; set; } //validar
+        public string CPF { get; set; } //validar - ainda nao feito
         public string Endereco { get; set; }
         public decimal RendaMensal { get; set; }
-        public int NumeroConta { get; set; } //o sistema deverá gerar um número da conta de forma sequencial
+        public int NumeroConta { get; set; } //o sistema deverá gerar um número da conta de forma sequencial - OK!
         public AgenciasEnum Agencia { get; set; } // aqui é um Enum
+        //quando o cliente criar uma nova conta o sistema deve apresentar em qual das agências sua conta estará vinculada. - OK!
         public TipoContaEnum TipoConta { get; set; }
-        //quando o cliente criar uma nova conta o sistema deve apresentar em qual das agências sua conta estará vinculada. 
         public decimal Saldo { get; set; }
         public List<Transacao> ListaTransacoes { get; set; }
 
@@ -40,7 +40,7 @@ namespace DevBank
         public string RetornaSaldo()
         {
             // firstOrDefult na lista de contas que contem o usuario que tem esse numero de conta
-            return $"{Saldo}";
+            return $"Seu saldo no momento é: {Saldo:C2}";
         }
 
         public void Deposito(decimal valor)

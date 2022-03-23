@@ -41,7 +41,7 @@ while (true)
                 Console.WriteLine(conta.RetornaSaldo());
                 conta.Deposito(200);
                 Console.WriteLine(conta.RetornaSaldo());
-                conta.Transferencia(sistema, conta1, 20);
+                
             }
 
 

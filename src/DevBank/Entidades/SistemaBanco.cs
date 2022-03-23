@@ -68,6 +68,11 @@ namespace DevBank.Entidades
 
             Console.WriteLine("Por favor, digite seu nome:");
             var nome = Console.ReadLine();
+            if(nome.Any(char.IsDigit) == true || nome == "")
+            {
+                Console.WriteLine("Nome Invalido");
+                return null;
+            }
 
             Console.WriteLine("Por favor, digite seu endereço:");
             var endereco = Console.ReadLine();
@@ -147,7 +152,8 @@ namespace DevBank.Entidades
                 return null;
             }
 
-            Console.WriteLine($"Passou (conta existe)");
+            Console.WriteLine($"Olá {contaExiste.Nome}, seja bem vindo novamente!");
+            Console.WriteLine($"O que deseja fazer hoje?!");
             return contaExiste;
         }
     }
