@@ -9,22 +9,30 @@ namespace DevBank.Entidades
 {
     public class ContaCorrente : Conta
     {
-        private decimal _chequeEspecial;
-
+        
         public ContaCorrente(string nome, string cPF, string endereco, decimal rendaMensal, AgenciasEnum agencia, TipoContaEnum tipoConta, int numeroConta) : base(nome, cPF, endereco, rendaMensal, agencia, tipoConta, numeroConta)
         {
-            ChequeEspecial = CalculaValorChequeEspecial(rendaMensal);
+            ChequeEspecial = 0.1M * (rendaMensal);
         }
 
-        public decimal ChequeEspecial { get => _chequeEspecial; set => _chequeEspecial = value; }
+        public decimal ChequeEspecial { get ; private set; }
 
-        private decimal CalculaValorChequeEspecial(decimal rendaMensal)
+        public void ValorChequeEspecial()
         {
-            //o valor do chque especial é 10% da renda mensal
-            // então o saldo desse cliente é Saldo mensal + cheque especial
-            // logo, ele pode ficar XReais negativo por conta do cheque especial
+            Console.WriteLine($"O valor do seu cheque especial é : {ChequeEspecial:C2}");
+        }
+        public override string Saque(decimal valor)
+        {
+            if (valor <= Saldo + ChequeEspecial)
+            {
 
-            return 0.1M * (rendaMensal);
+                Saldo = Saldo + ChequeEspecial - valor - ChequeEspecial;
+                ChequeEspecial = (Saldo + ChequeEspecial) - valor;
+                var transacao = new Transacao(NumeroConta, valor, "Saque");
+                ListaTransacoes.Add(transacao);
+                return $"O saque no valor de {valor:C2} foi realizado com sucesso, seu novo saldo é de {Saldo:C2}";
+            }
+            return $"Não foi possivel realizar o saque pois seu saldo atual é de {Saldo:C2} e seu limite do cheque especial é de {ChequeEspecial:C2}";
 
         }
 

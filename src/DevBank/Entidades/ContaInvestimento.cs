@@ -25,20 +25,29 @@ namespace DevBank.Entidades
         // se for LCI ou LCA valor da CDI (11,65% aa)
         // mensagem perguntanto se deseja investic (criar uma classe investimentos)
 
-        public void LCI()
+        public void Simulacao(decimal valorInvestido, DateTime dataSistema, int tempoDePermanencia)
         {
-            var dataHoje = DateTime.Now;
-            var dataFimInvestimento = dataHoje.AddMonths(6);
-            var diferencaEmDias = (dataFimInvestimento-dataHoje).Days;
-
+            var dataFimInvestimento = dataSistema.AddMonths((tempoDePermanencia)).Month;
+            var jurosPeloTempo = (decimal)Math.Pow(1 + 0.4994 / 100, dataFimInvestimento);
+            decimal montante = valorInvestido * jurosPeloTempo;
+            Console.WriteLine($"Em {tempoDePermanencia} meses, o investimento de {valorInvestido:C2} renderá{(montante - valorInvestido):C2}, ou um total de {montante:C2}");
+        }
+        public string LCI(decimal valorInvestido, DateTime dataSistema, int tempoDePermanencia)
+        {
             // digitar o tempo que quer simular, o minimo são 6 meses
+            //depois verificar se o saldo da conta possui o valor do montante para realizar o investimento
+            //se sim gera um novo investimento a partir da simulacao
+            //se nao gera um erro
+            if (tempoDePermanencia < 6)
+            {
 
-            var capital = 1000;
-            double juros = 0.0214f/100;
-            var rendimento =(decimal)Math.Pow(juros + 1, diferencaEmDias);
-            var montante = capital * rendimento;
-            Console.WriteLine(montante);
-
+                throw new Exception("Não é possivel realizar a simulação, pois o tempo minimo de permanencia sao 6 meses") ;
+            }
+            var dataFimInvestimento = dataSistema.AddMonths((tempoDePermanencia));
+            var diferencaEmDias = (dataFimInvestimento - dataSistema).Days;
+            var jurosPeloTempo = (decimal)Math.Pow(1 + 0.0214f/ 100, diferencaEmDias);
+            decimal montante = valorInvestido * jurosPeloTempo;            
+            return $"O seu dinheiro renderá : {montante:c2}";
 
         }
 
@@ -76,6 +85,6 @@ namespace DevBank.Entidades
 
         }
 
-        public override dynamic InformaçõesConta() => $"Olá {Nome}";
+      
     }
 }

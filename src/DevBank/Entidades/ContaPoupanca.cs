@@ -17,20 +17,14 @@ namespace DevBank.Entidades
         //6,17%
         //quanto rende a poupança por mês?
         // montante = C x((1+i)^T 
-        public void Simulacao()
+        public void Simulacao(decimal valorInvestido, DateTime dataSistema, int tempoDePermanencia)
         {
-            Console.WriteLine("Digite o tempo que deseja manter o valor aplicado");
-            var tempo = Int32.Parse(Console.ReadLine());
-            Console.WriteLine("Digite o valor a aplicado");
-            var valorInvestimento = Decimal.Parse(Console.ReadLine());
-            var jurosPeloTempo = (decimal)Math.Pow(1 + 0.5002/100, tempo);
-            var montante = valorInvestimento * jurosPeloTempo;
-            Console.WriteLine($"Em {tempo} meses, o investimento de {valorInvestimento:C2} renderá{(montante - valorInvestimento):C2}, ou um total de {montante:C2}");
+            var dataFimInvestimento = dataSistema.AddMonths((tempoDePermanencia)).Month;
+            var jurosPeloTempo = (decimal)Math.Pow(1 + 0.4994/ 100, dataFimInvestimento);
+            decimal montante = valorInvestido * jurosPeloTempo;
+            Console.WriteLine($"Em {tempoDePermanencia} meses, o investimento de {valorInvestido:C2} renderá{(montante - valorInvestido):C2}, ou um total de {montante:C2}");
         }
 
-        public override string InformaçõesConta()
-        {
-            return $"Ola {Nome}, seu saldo no momento é de R${Saldo}. Sua agencia é {Agencia} e o numero da sua conta é {NumeroConta}";
-        }
+       
     }
 }

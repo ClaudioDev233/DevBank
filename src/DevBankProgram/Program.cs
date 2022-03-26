@@ -4,9 +4,11 @@ using DevBank.Entidades;
 
 
 var sistema = new SistemaBanco();
+var validacoes = new Validacoes();
+var dataSistema = DateTime.Now;
+var operacoes = new OperacoesDeConta();
 sistema.CriaListaContas();
 sistema.CriaListaTranferencias();
-
 while (true)
 {
     try
@@ -16,51 +18,109 @@ while (true)
         Console.WriteLine("Ola! Seja bem vindo ao DevBank!");
         Console.WriteLine("------------------------------------------");
         Console.WriteLine("O que deseja fazer hoje?");
-        Console.WriteLine("[1] Verificar uma conta já existente?");
-        Console.WriteLine("[2] Criar uma nova conta?");
-        Console.WriteLine("[3] Sair");
+        Console.WriteLine("[1] Criar uma nova conta?");
+        Console.WriteLine("[2] Verificar uma conta já existente?");
+        Console.WriteLine("[3] Listar contas");
+        Console.WriteLine("[4] Listar contas negativadas");
+        Console.WriteLine("[5] Total do valor investido");
+        Console.WriteLine("[6] Transações de um cliente específico");
+        Console.WriteLine("[7] Viagem no tempo");
+        Console.WriteLine("[0] Sair");
         var opt = Console.ReadLine();
 
 
-        if (opt == "2")
+        if (opt == "1")
         {
-
+            Console.Clear();
             sistema.CriarConta();
             Console.WriteLine("Pressione algo para voltar");
             Console.ReadKey();
 
-        }
-        if (opt == "1")
+        } // falta validar as outras opcoes
+        if (opt == "2")
         {
-            //verificar se a conta existe
-            //se a conta existir, colocar ela numa variavel
-            // depois listar as opcoes das coisas e assim vai
-            var conta = sistema.RetornaContaEspecifica();
-            if (conta != null)
+            Console.Clear();
+            
+
+            var numeroDaConta = sistema.ProcuraContaNaListaGeralDeContas(validacoes);
+            if (numeroDaConta == null)
             {
-                Console.WriteLine(conta.RetornaSaldo());
-                conta.Deposito(200);
-                Console.WriteLine(conta.RetornaSaldo());
+
                 
+                Console.WriteLine("Pressione algo para retornar ao inicio");
+                Console.ReadKey();//verificar se a conta existe no DB de contas - ok
+
             }
+               
+            var conta = sistema.RetornaContaEspecifica(numeroDaConta);
+            //ver qual é o tipo dessa conta
 
+            //suponhetamos que a conta existe no sistema, vai me retornar um inteiro que é o numero da conta
+            if (conta != null && conta.TipoConta == DevBank.Enum.TipoContaEnum.Poupança)
+            {
+                var contaPoupanca = sistema.RetornaContaDoTipo("Poupança", numeroDaConta);
+                //aqui dentro eu procuro a conta na lista do seu tipo, no caso popança
+                operacoes.OperacaoPoupanca(sistema, contaPoupanca, validacoes, dataSistema);
 
+            }
+            if (conta != null && conta.TipoConta == DevBank.Enum.TipoContaEnum.Investimento)
+            {
+                var contaInvestimento = sistema.RetornaContaDoTipo("Investimento", numeroDaConta);
+                operacoes.OperacaoInvestimento(sistema, contaInvestimento, validacoes, dataSistema);
 
-            Console.WriteLine("Pressione algo para voltar");
+            }
+            if (conta != null && conta.TipoConta == DevBank.Enum.TipoContaEnum.Corrente)
+            {
+                var contaCorrente = sistema.RetornaContaDoTipo("Corrente", numeroDaConta);
+                operacoes.OperacaoCorrente(sistema, contaCorrente, validacoes, dataSistema);
+
+            }
+            Console.WriteLine("Pressione algo para retornar ao inicio");
+            Console.ReadKey();
+        } // funciona - checar 
+        if (opt == "3")
+        {
+
+            Console.WriteLine(sistema.RetornaContas(validacoes));
             Console.ReadKey();
 
+           //ok
+        } // lista e passa nos testes
+        if (opt == "4")
+        {
 
-        }
-        else if (opt == "3")
+            Console.WriteLine("[4] Listar contas negativadas");
+            sistema.RetornaContasNegativadas();
+            Console.ReadKey();
+        } //funciona
+        if (opt == "5")
+        {
+
+            Console.WriteLine("[5] Total do valor investido");
+        } //precisa implementar
+
+        if (opt == "6")
+        {
+            
+         var numeroConta =  sistema.ProcuraContaNaListaGeralDeContas(validacoes);
+            var conta = sistema.RetornaContaEspecifica(numeroConta);
+            if(conta != null)
+            sistema.ListarTransacoesDeUmCliente(conta);
+
+            Console.WriteLine("Pressione algo para retornar ao inicio");
+            Console.ReadKey();
+        } //está quebrando
+       
+        else if(opt == "0")
         {
             Console.WriteLine("Até logo");
             break;
         }
-
     }
     catch (Exception ex)
     {
         Console.WriteLine(ex.Message);
+        Console.ReadKey();
     }
 
 }

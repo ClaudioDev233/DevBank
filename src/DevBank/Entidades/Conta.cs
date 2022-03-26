@@ -7,16 +7,16 @@ namespace DevBank
     public abstract class Conta
     {
 
-        public string Nome { get; set; }
-        public string CPF { get; set; } //validar - ainda nao feito
-        public string Endereco { get; set; }
-        public decimal RendaMensal { get; set; }
-        public int NumeroConta { get; set; } //o sistema deverá gerar um número da conta de forma sequencial - OK!
-        public AgenciasEnum Agencia { get; set; } // aqui é um Enum
+        public string Nome { get; private set; }
+        public string CPF { get; private set; } //validar - ainda nao feito
+        public string Endereco { get; private set; }
+        public decimal RendaMensal { get; private set; }
+        public int NumeroConta { get; private set; } //o sistema deverá gerar um número da conta de forma sequencial - OK!
+        public AgenciasEnum Agencia { get; private set; } // aqui é um Enum
         //quando o cliente criar uma nova conta o sistema deve apresentar em qual das agências sua conta estará vinculada. - OK!
-        public TipoContaEnum TipoConta { get; set; }
-        public decimal Saldo { get; set; }
-        public List<Transacao> ListaTransacoes { get; set; }
+        public TipoContaEnum TipoConta { get; private set; }
+        public decimal Saldo { get; protected set; }
+        public List<Transacao> ListaTransacoes { get; private set; }
 
         public Conta(string nome, string cPF, string endereco, decimal rendaMensal, AgenciasEnum agencia, TipoContaEnum tipoConta, int numeroConta)
         {
@@ -34,85 +34,94 @@ namespace DevBank
 
 
 
-        public abstract dynamic InformaçõesConta();
+        public virtual dynamic InformaçõesConta()
+        {
+            return $"Ola {Nome}, seu saldo no momento é de R${Saldo}. Sua agencia é {Agencia} e o numero da sua conta é {NumeroConta}";
+        }
 
 
         public string RetornaSaldo()
         {
-            // firstOrDefult na lista de contas que contem o usuario que tem esse numero de conta
-            return $"Seu saldo no momento é: {Saldo:C2}";
+            return $"Seu saldo é: {Saldo:C2}";
         }
 
-        public void Deposito(decimal valor)
+        public string Deposito(decimal valor)
         {
             Saldo += valor;
             var transacao = new Transacao(NumeroConta, valor, "Deposito");
             ListaTransacoes.Add(transacao);
+            return $"O depósito no valor de {valor:C2} foi realizado com sucesso, seu novo saldo é de {Saldo:C2}";
         }
 
-        public string Saque(decimal valor)
+        public virtual string Saque(decimal valor) 
         {
             if (valor <= Saldo)
             {
                 Saldo -= valor;
                 var transacao = new Transacao(NumeroConta, valor, "Saque");
                 ListaTransacoes.Add(transacao);
-                return $"O seu saque no valor de {valor:C2} foi realizado com sucesso, seu novo saldo é de {Saldo:C2}";
+                return $"O saque no valor de {valor:C2} foi realizado com sucesso, seu novo saldo é de {Saldo:C2}";
             }
-            return "Não é possivel fazer o saque";
+            throw new Exception( $"Não foi possivel realizar o saque pois seu saldo atual é de {Saldo:C2}");
 
         }
 
         public void Extrato()
         {
-            Console.WriteLine(Nome);
-            foreach (var transacao in ListaTransacoes)
-            {
 
-                Console.WriteLine(transacao.Data);
-                Console.WriteLine(transacao.Valor);
-                Console.WriteLine(transacao.Tipo);
+            if (ListaTransacoes.Count != 0)
+            {
+                Console.WriteLine("Suas ultimas transações foram:");
+                foreach (var transacao in ListaTransacoes)
+                {
+
+                    Console.WriteLine(transacao.Data);
+                    Console.WriteLine(transacao.Valor);
+                    Console.WriteLine(transacao.Tipo);
+                }
             }
+            throw new Exception("Ainda não foram efetuadas transações.");
         }
 
-        public Transferencia? Transferencia(SistemaBanco listaContas, Conta contaDestino, decimal valor) //nao esquecer de passar a data do sistema
+        public Transferencia? Transferencia(SistemaBanco listaContas, int numeroContaDestino, decimal valor, DateTime dataSistema) //nao esquecer de passar a data do sistema
         {
-            var date = DateTime.Now;
+            var date = dataSistema;
+            //colocar do lado de fora talvez? 
+            
+            #region Verificação se a conta consta no banco de dados 
 
-            #region Verificação se a conta consta no banco de dados
-
-            var contaExiste = listaContas.ListaDeContas.Find(conta => conta.NumeroConta == contaDestino.NumeroConta);
+            var contaExiste = listaContas.ListaDeContas.Find(conta => conta.NumeroConta == numeroContaDestino);
             if (contaExiste == null)
             {
-                Console.WriteLine($"A conta com o nunmero {contaDestino.NumeroConta} naõ existe no sistema");
-                return null;
+                throw new Exception($"A conta com o nunmero {numeroContaDestino} naõ existe no sistema");
+                
             }
 
-            Console.WriteLine($"Passou (conta existe)");
+           
             #endregion
 
             #region Verifica se o dia não é fim de semana
 
             if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
             {
-                Console.WriteLine("Não é possivel realizar transferencias no fim de semana");
-                return null;
+                throw new Exception("Não é possivel realizar transferencias no fim de semana");
+                
 
-            } //verifica se é fim de semana
-            Console.WriteLine("Vamos prosseguir com a transferencia - Passou (dia da semana)");
+            } 
+            
             #endregion
-
-            var contaDest = listaContas.ListaDeContas.FirstOrDefault(conta => conta.NumeroConta == contaDestino.NumeroConta); //procura mas nao verifica
+            
+            var contaDestino = listaContas.ListaDeContas.FirstOrDefault(conta => conta.NumeroConta == contaExiste.NumeroConta); //procura mas nao verifica
 
             #region Verifica se a conta destino não é a mesma conta que fará a tranferencia
 
-            if (NumeroConta == contaDest.NumeroConta)
+            if (NumeroConta == contaDestino.NumeroConta)
             {
-                Console.WriteLine("Não pode transferir para sua propria conta");
-                return null;
+                throw new Exception("Não pode transferir para sua propria conta");
+ 
             }
 
-            Console.WriteLine("Passou (não é a mesma conta)");
+            
 
             #endregion
 
@@ -120,15 +129,14 @@ namespace DevBank
 
             if (valor > Saldo)
             {
-                Console.WriteLine("SaldoInsuficiente");
-                return null;
+                throw new Exception("Saldo Insuficiente");
+               
             }
-            Console.WriteLine("Passou (teste saldo)");
-
+ 
             #endregion
 
             Saldo -= valor;
-            contaDest.Saldo += valor;
+            contaDestino.Saldo += valor;
 
             var transacao = new Transacao(NumeroConta, contaDestino.NumeroConta, valor, "transferencia");
             ListaTransacoes.Add(transacao);
