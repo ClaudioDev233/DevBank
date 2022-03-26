@@ -9,6 +9,9 @@ var dataSistema = DateTime.Now;
 var operacoes = new OperacoesDeConta();
 sistema.CriaListaContas();
 sistema.CriaListaTranferencias();
+var conta1 = new ContaCorrente("Claudio", "sdhasuid", "dudsadhusa", 3000, DevBank.Enum.AgenciasEnum.Florianópolis, DevBank.Enum.TipoContaEnum.Corrente,0);
+sistema.ListaDeContas.Add(conta1);
+sistema.ListaDeContasCorrente.Add(conta1);
 while (true)
 {
     try
@@ -32,9 +35,11 @@ while (true)
         if (opt == "1")
         {
             Console.Clear();
-            sistema.CriarConta();
+            sistema.CriarConta(validacoes);
             Console.WriteLine("Pressione algo para voltar");
             Console.ReadKey();
+
+
 
         } // falta validar as outras opcoes
         if (opt == "2")
@@ -81,7 +86,8 @@ while (true)
         if (opt == "3")
         {
 
-            Console.WriteLine(sistema.RetornaContas(validacoes));
+            sistema.RetornaContas(validacoes);
+            Console.WriteLine("Pressione algo para retornar ao inicio");
             Console.ReadKey();
 
            //ok
@@ -91,13 +97,17 @@ while (true)
 
             Console.WriteLine("[4] Listar contas negativadas");
             sistema.RetornaContasNegativadas();
+            Console.WriteLine("Pressione algo para retornar ao inicio");
             Console.ReadKey();
         } //funciona
         if (opt == "5")
         {
 
             Console.WriteLine("[5] Total do valor investido");
-        } //precisa implementar
+            Console.WriteLine(sistema.RetornaValorInvestimentos());
+            Console.WriteLine("Pressione algo para retornar ao inicio");
+            Console.ReadKey();
+        } //precisa mudar o resto das contas
 
         if (opt == "6")
         {
@@ -109,7 +119,7 @@ while (true)
 
             Console.WriteLine("Pressione algo para retornar ao inicio");
             Console.ReadKey();
-        } //está quebrando
+        } 
        
         else if(opt == "0")
         {

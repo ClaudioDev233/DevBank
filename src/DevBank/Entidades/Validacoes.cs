@@ -8,14 +8,15 @@ namespace DevBank.Entidades
 {
     public class Validacoes
     {
-        public dynamic? ValidaValor(string valor)
+        public bool ValidaValor(string valor)
         {
-            if (valor.Any(char.IsLetter) || valor.Any(char.IsWhiteSpace) || valor == "")
-                return null;
-            var validaValor = Decimal.TryParse(valor, out decimal valorTransacao);
-            if (validaValor == true)
-                return valorTransacao;
-            return null;
+            if (valor.Any(char.IsLetter) || valor.Any(char.IsWhiteSpace) || valor == "" || valor == null)
+                throw new Exception("O valor digitado é inválido");
+            return true;
+            //Decimal.TryParse(valor, out decimal valorTransacao);
+            //if (validaValor == true)
+            // return valorTransacao;
+            // throw new Exception("Valor digitado é inválido");
         }
         public dynamic? ValidaConta(string numeroConta)
         {
@@ -37,9 +38,25 @@ namespace DevBank.Entidades
         }
         public string ValidaEscolha(string texto)
         {
-            if (texto.Any(char.IsLetter)|| texto.Any(char.IsWhiteSpace)|| texto == "")
+            if (texto.Any(char.IsLetter) || texto.Any(char.IsWhiteSpace) || texto == "")
                 throw new Exception("Opção inválida");
             return texto;
         }
+
+        public bool ValidaNome(string nome)
+        {
+            if (nome.Any(char.IsDigit) == true || nome == "" || nome == null)
+                throw new Exception("O nome inserido é inválido");
+            return true;
+        }
+        
+        public bool ValidaEndereço(string endereço)
+        {
+            if (endereço.Any(char.IsDigit) == true || endereço == ""|| endereço == null)
+                throw new Exception("O endereço inserido é inválido");
+            return true;
+        }
+        //public bool ValidaCPF(int cpf)
+
     }
 }

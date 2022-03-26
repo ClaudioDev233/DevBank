@@ -47,44 +47,47 @@ namespace DevBank.Entidades
             var diferencaEmDias = (dataFimInvestimento - dataSistema).Days;
             var jurosPeloTempo = (decimal)Math.Pow(1 + 0.0214f/ 100, diferencaEmDias);
             decimal montante = valorInvestido * jurosPeloTempo;            
-            return $"O seu dinheiro renderá : {montante:c2}";
+            return $"O seu dinheiro renderá : {montante:c2} a uma taxa de 0.0214% ao dia";
 
         }
 
-        public void LCA()
+       
+        public string LCA(decimal valorInvestido, DateTime dataSistema, int tempoDePermanencia)
         {
-            var dataHoje = new DateTime();
-            var dataFimInvestimento = dataHoje.AddMonths(12);
-            var diferencaEmDias = (dataFimInvestimento - dataHoje).Days;
-
             // digitar o tempo que quer simular, o minimo são 6 meses
+            //depois verificar se o saldo da conta possui o valor do montante para realizar o investimento
+            //se sim gera um novo investimento a partir da simulacao
+            //se nao gera um erro
+            if (tempoDePermanencia < 12)
+            {
 
-            double capital = 1000;
-            double juros = 0.0239F / 100;
-            double rendimento = Math.Pow(juros + 1, diferencaEmDias);
-            var montante = capital * rendimento;
-            Console.WriteLine(montante);
-
-            var novoInvestimento = new Investimento(capital, "LCA", dataHoje, dataFimInvestimento);
-            ListaInvestimentos.Add(novoInvestimento);
+                throw new Exception("Não é possivel realizar a simulação, pois o tempo minimo de permanencia são 12 meses");
+            }
+            var dataFimInvestimento = dataSistema.AddMonths((tempoDePermanencia));
+            var diferencaEmDias = (dataFimInvestimento - dataSistema).Days;
+            var jurosPeloTempo = (decimal)Math.Pow(1 + 0.0239F / 100, diferencaEmDias);
+            decimal montante = valorInvestido * jurosPeloTempo;
+            return $"O seu dinheiro renderá : {montante:c2}, a uma taxa de 0.0239% ao dia";
         }
-        public void CDB()
+          
+        public string CDB(decimal valorInvestido, DateTime dataSistema, int tempoDePermanencia)
         {
-            var dataHoje = new DateTime();
-            var dataFimInvestimento = dataHoje.AddMonths(36);
-            var diferencaEmDias = (dataFimInvestimento - dataHoje).Days;
-
             // digitar o tempo que quer simular, o minimo são 6 meses
+            //depois verificar se o saldo da conta possui o valor do montante para realizar o investimento
+            //se sim gera um novo investimento a partir da simulacao
+            //se nao gera um erro
+            if (tempoDePermanencia < 12)
+            {
 
-            double capital = 1000;
-            double juros = 0.0265F / 100;
-            double rendimento = Math.Pow(juros + 1, diferencaEmDias);
-            var montante = capital * rendimento;
-            Console.WriteLine(montante);
-
-
+                throw new Exception("Não é possivel realizar a simulação, pois o tempo minimo de permanencia são 12 meses");
+            }
+            var dataFimInvestimento = dataSistema.AddMonths((tempoDePermanencia));
+            var diferencaEmDias = (dataFimInvestimento - dataSistema).Days;
+            var jurosPeloTempo = (decimal)Math.Pow(1 + 0.0265F / 100, diferencaEmDias);
+            decimal montante = valorInvestido * jurosPeloTempo;
+            return $"O seu dinheiro renderá : {montante:c2}, a uma taxa de 0.0265% ao dia";
         }
 
-      
+
     }
 }

@@ -15,6 +15,7 @@ namespace DevBank.Entidades
         public List<ContaPoupanca> ListaDeContasPoupanca { get; private set; }
         public List<ContaInvestimento> ListaDeContasInvestimento { get; private set; }
         public List<Transferencia> ListaDeTransferencias { get; private set; }
+        public List<Investimento> ListaDeInvestimentos { get; private set; }
 
         public void CriaListaContas()
         {
@@ -22,19 +23,14 @@ namespace DevBank.Entidades
             ListaDeContasCorrente = new List<ContaCorrente>();
             ListaDeContasInvestimento = new List<ContaInvestimento>();
             ListaDeContasPoupanca = new List<ContaPoupanca>();
+            ListaDeInvestimentos = new List<Investimento>();
         }
-        public void AddConta(Conta conta)
-        {
-            ListaDeContas.Add(conta);
-        } //deletar
-        public string RetornaContas(Validacoes validacao)
+        public void RetornaContas(Validacoes validacao)
         {
             if (ListaDeContas.Count == 0)
             {
-                Console.WriteLine("Não há contas no sistema!");
-                Console.WriteLine("Pressione algo para continuar");
-                Console.ReadKey();
-                return null;
+                throw new Exception("Não há contas no sistema!");
+                
             }
 
             Console.WriteLine($"No momento existem {ListaDeContas.Count} conta(s) registradas.\n");
@@ -114,7 +110,7 @@ namespace DevBank.Entidades
                     break;
             }
             
-            return "Pressione algo para continuar";
+          
         }
 
 
@@ -126,6 +122,24 @@ namespace DevBank.Entidades
         {
             if (transferencia != null)
                 ListaDeTransferencias.Add(transferencia);
+        }
+        public void AddInvestimento(Investimento investimento)
+        {
+            if (investimento == null)
+            throw new Exception("Investimento não pode ser criado");
+                ListaDeInvestimentos.Add(investimento);
+        }
+        public string RetornaValorInvestimentos()
+        {
+            if(ListaDeContasInvestimento.Count == 0)
+            throw new Exception("Não existem investimentos");
+
+             var soma = ListaDeInvestimentos.Sum(investimento => investimento.ValorAplicado);
+            if(soma == 0)
+            {
+                throw new Exception($"{soma:C2}");
+            }
+            return $"{soma:C2}";
         }
         public void RetornaTransferencias()
         {
@@ -143,26 +157,38 @@ namespace DevBank.Entidades
 
             }
         }
-        public Conta? CriarConta() //criar validacoes e colocar aqui, no caso é validacao cpf endereco renda tipo de conta e agencia
+        public void CriarConta(Validacoes validacao) //criar validacoes e colocar aqui, no caso é validacao cpf endereco renda tipo de conta e agencia
         {
             Console.WriteLine("Ok, vamos criar uma nova conta!");
 
             Console.WriteLine("Por favor, digite seu nome:");
             var nome = Console.ReadLine();
-            if (nome.Any(char.IsDigit) == true || nome == "")
+            var validaNome = validacao.ValidaNome(nome);
+            if (!validaNome)
             {
-                Console.WriteLine("Nome Invalido");
-                return null;
+                throw new Exception("Nome Invalido");  
             }
 
             Console.WriteLine("Por favor, digite seu endereço:");
             var endereco = Console.ReadLine();
+            var validaEndereco = validacao.ValidaEndereço(endereco);
+
+            if (!validaEndereco)
+            {
+                throw new Exception("Endereço inválido");
+            }
 
             Console.WriteLine("Digite seu CPF:");
             var cpf = Console.ReadLine();
 
             Console.WriteLine("Digite sua renda mensal para ver as opções de conta disponíveis para você");
-            var rendaMensal = decimal.Parse(Console.ReadLine());
+            var rendaMensal = Console.ReadLine();
+            var validaRenda = validacao.ValidaValor(rendaMensal);
+
+            if (!validaRenda)
+            {
+                throw new Exception("Formato da renda inválido");
+            }
 
             Console.WriteLine("Escolha o tipo de conta que deseja abrir:");
             Console.WriteLine("[1] Conta Corrente.");
@@ -172,8 +198,8 @@ namespace DevBank.Entidades
             var tipoConta = Int32.Parse(Console.ReadLine());
             if (tipoConta > 3 || tipoConta < 1) //mudar isso mais tarde
             {
-                Console.WriteLine("Tipo conta escolhido não existe");
-                return null; //isso vira um break depois
+                throw new Exception("Tipo conta escolhido não existe");
+                
             }
 
             Console.WriteLine("Em qual agencia deseja abrir sua conta?");
@@ -182,52 +208,46 @@ namespace DevBank.Entidades
             Console.WriteLine("[3] 003 - Biguaçu");
 
             var agencia = Int32.Parse(Console.ReadLine());
-            if (agencia > 3 || agencia < 1) //mudar isso mais tarde
+            if (agencia > 3 || agencia < 1)
             {
-                Console.WriteLine("Agencia não encontrada");
-                return null; //isso vira um break depois
+                throw new Exception("Agencia não encontrada");
+               
             }
-            Console.WriteLine("passei");
+            
             if (tipoConta == 1)
             {
 
-                var conta = new ContaCorrente(nome, cpf, endereco, rendaMensal, (Enum.AgenciasEnum)agencia, (Enum.TipoContaEnum)tipoConta, ListaDeContas.Count);
+                var conta = new ContaCorrente(nome, cpf, endereco, Decimal.Parse(rendaMensal), (Enum.AgenciasEnum)agencia, (Enum.TipoContaEnum)tipoConta, ListaDeContas.Count);
                 ListaDeContas.Add(conta);
                 ListaDeContasCorrente.Add(conta);
                 Console.WriteLine("Conta corrente criada com sucesso");
-                return null;
+               
             }
             if (tipoConta == 2)
             {
 
-                var conta = new ContaPoupanca(nome, cpf, endereco, rendaMensal, (Enum.AgenciasEnum)agencia, (Enum.TipoContaEnum)tipoConta, ListaDeContas.Count);
+                var conta = new ContaPoupanca(nome, cpf, endereco, Decimal.Parse(rendaMensal), (Enum.AgenciasEnum)agencia, (Enum.TipoContaEnum)tipoConta, ListaDeContas.Count);
                 ListaDeContas.Add(conta);
                 ListaDeContasPoupanca.Add(conta);
                 Console.WriteLine("Conta Poupança criada com sucesso");
-                return null;
+                
             }
             if (tipoConta == 3)
             {
 
-                var conta = new ContaInvestimento(nome, cpf, endereco, rendaMensal, (Enum.AgenciasEnum)agencia, (Enum.TipoContaEnum)tipoConta, ListaDeContas.Count);
+                var conta = new ContaInvestimento(nome, cpf, endereco, Decimal.Parse(rendaMensal), (Enum.AgenciasEnum)agencia, (Enum.TipoContaEnum)tipoConta, ListaDeContas.Count);
                 ListaDeContas.Add(conta);
                 ListaDeContasInvestimento.Add(conta);
                 Console.WriteLine("Conta Poupança criada com sucesso");
 
             }
-
-            return null;
-
-            // precisa das informacoes e do tipo da conta
+    
         }
         public void ListarTransacoesDeUmCliente(Conta conta)
         {
-            
-            
+      
                 conta.Extrato();
 
-          
-          
               
         }
         public Conta? RetornaContaEspecifica(int numeroConta)
@@ -271,7 +291,7 @@ namespace DevBank.Entidades
 
                     break;
             }
-            throw new Exception("Blablalba");
+            throw new Exception("Nenhuma conta foi encontrada");
         }
         public void RetornaContasNegativadas()
         {

@@ -8,7 +8,7 @@ namespace DevBank.Entidades
 {
     public class Investimento
     {
-        public Investimento(double valorAplicado, string tipoAplicacao, DateTime dataAplicacao, DateTime dataRetirada)
+        public Investimento(decimal valorAplicado, string tipoAplicacao, DateTime dataAplicacao, DateTime dataRetirada)
         {
             ValorAplicado = valorAplicado;
             TipoAplicacao = tipoAplicacao;
@@ -16,7 +16,7 @@ namespace DevBank.Entidades
             DataRetirada = dataRetirada;
         }
 
-        public double ValorAplicado { get; set; }
+        public decimal ValorAplicado { get; set; }
         public string TipoAplicacao { get; set; }
         public DateTime DataAplicacao { get; set; }
         public DateTime DataRetirada { get; set; }
