@@ -28,7 +28,7 @@ namespace DevBank.Entidades
         {
             ListaDeTransferencias = new List<Transferencia>();
         }
-        public void CriarConta(Validacoes validacao) //criar validacoes e colocar aqui, no caso é validacao cpf endereco renda tipo de conta e agencia
+        public void CriarConta(Validacoes validacao) 
         {
             Console.WriteLine("Ok, vamos criar uma nova conta!");
 
@@ -72,7 +72,7 @@ namespace DevBank.Entidades
             Console.WriteLine("[3] Conta Investimento.\n");
 
             var tipoConta = Int32.Parse(Console.ReadLine());
-            if (tipoConta > 3 || tipoConta < 1) //mudar isso mais tarde
+            if (tipoConta > 3 || tipoConta < 1)
             {
                 throw new Exception("Tipo conta escolhido não existe");
                 

@@ -50,7 +50,7 @@ namespace DevBank.Entidades
                 throw new Exception("O endereço inserido é inválido");
             return true;
         }
-        //public bool ValidaCPF(int cpf)
+        
 
         public bool validaCPF(string cpf)
         {

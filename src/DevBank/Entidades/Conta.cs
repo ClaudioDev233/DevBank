@@ -73,36 +73,12 @@ namespace DevBank
                 Console.WriteLine($"Tipo: {transacao.Tipo}");
             }
         }
-        public virtual Transferencia? Transferencia(SistemaBanco listaContas, int numeroContaDestino, decimal valor, DateTime dataSistema) //nao esquecer de passar a data do sistema
+        public virtual Transferencia? Transferencia(SistemaBanco listaContas, int numeroContaDestino, decimal valor, DateTime dataSistema)
         {
             var date = dataSistema;
-            //colocar do lado de fora talvez? 
 
-            #region Verificação se a conta consta no banco de dados 
+            var contaDestino = listaContas.ListaDeContas.FirstOrDefault(conta => conta.NumeroConta == numeroContaDestino);
 
-            //var contaExiste = listaContas.ListaDeContas.Find(conta => conta.NumeroConta == numeroContaDestino);
-            //if (contaExiste == null)
-            //{
-            //    throw new Exception($"A conta com o nunmero {numeroContaDestino} naõ existe no sistema");
-
-            //}
-
-
-            #endregion
-
-            #region Verifica se o dia não é fim de semana
-
-            //if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
-            //{
-            //    throw new Exception("Não é possivel realizar transferencias no fim de semana");
-
-            //}
-
-            #endregion
-
-            var contaDestino = listaContas.ListaDeContas.FirstOrDefault(conta => conta.NumeroConta == numeroContaDestino); //procura mas nao verifica
-
-            #region Verifica se a conta destino não é a mesma conta que fará a tranferencia
 
             if (NumeroConta == contaDestino.NumeroConta)
             {
@@ -110,19 +86,11 @@ namespace DevBank
 
             }
 
-
-
-            #endregion
-
-            #region Verifica se tem saldo disponivel
-
             if (valor > Saldo)
             {
                 throw new Exception("Saldo Insuficiente");
 
             }
-
-            #endregion
 
             Saldo -= valor;
             contaDestino.Saldo += valor;
@@ -158,8 +126,6 @@ namespace DevBank
                 throw new Exception("Endereço inválido");
             }
 
-
-
             Console.WriteLine("Digite sua nova renda mensal");
             var rendaMensal = Console.ReadLine();
             var validaRenda = validacao.ValidaValor(rendaMensal);
@@ -187,6 +153,6 @@ namespace DevBank
             Agencia = (AgenciasEnum)agencia;
 
             Console.WriteLine("Alterações feitas com sucesso!");
-        } //ok!
+        }
     }
 }

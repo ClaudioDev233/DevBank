@@ -31,9 +31,7 @@ namespace DevBank.Entidades
             decimal montante = valorInvestido * jurosPeloTempo;            
             return $"O seu dinheiro renderá : {montante:c2} a uma taxa de 0.0214% ao dia";
 
-        }
-
-       
+        }  
         public string LCA(decimal valorInvestido, DateTime dataSistema, int tempoDePermanencia)
         {
            
@@ -47,8 +45,7 @@ namespace DevBank.Entidades
             var jurosPeloTempo = (decimal)Math.Pow(1 + 0.0239F / 100, diferencaEmDias);
             decimal montante = valorInvestido * jurosPeloTempo;
             return $"O seu dinheiro renderá : {montante:c2}, a uma taxa de 0.0239% ao dia";
-        }
-          
+        }        
         public string CDB(decimal valorInvestido, DateTime dataSistema, int tempoDePermanencia)
         {
            
@@ -63,7 +60,6 @@ namespace DevBank.Entidades
             decimal montante = valorInvestido * jurosPeloTempo;
             return $"O seu dinheiro renderá : {montante:c2}, a uma taxa de 0.0265% ao dia";
         }
-
         public void ListarInvestimento()
         {
             if (ListaInvestimentos.Count == 0)

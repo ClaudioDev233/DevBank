@@ -9,18 +9,15 @@ var dataSistema = DateTime.Now;
 var operacoes = new OperacoesDeConta();
 sistema.CriaListaContas();
 sistema.CriaListaTranferencias();
-var conta1 = new ContaCorrente("Claudio", "sdhasuid", "dudsadhusa", 3000, DevBank.Enum.AgenciasEnum.Florianópolis, DevBank.Enum.TipoContaEnum.Corrente,0);
-sistema.ListaDeContas.Add(conta1);
-sistema.ListaDeContasCorrente.Add(conta1);
 while (true)
 {
     try
 
     {
         Console.Clear();
-        Console.WriteLine(dataSistema);
 
         Console.WriteLine("Ola! Seja bem vindo ao DevBank!");
+        Console.WriteLine($"Hoje é dia {dataSistema:dd MMMM} de {dataSistema:yyyy}. Agora são {dataSistema:H:mm}.");
         Console.WriteLine("------------------------------------------");
         Console.WriteLine("O que deseja fazer hoje?");
         Console.WriteLine("[1] Criar uma nova conta?");
@@ -124,8 +121,17 @@ while (true)
         if (opt == "7")
         {
             Console.WriteLine("Viagem no tempo");
-            var novaData = dataSistema.AddMonths(6);
-            Console.WriteLine(dataSistema =novaData);
+            Console.WriteLine("Digite o número (em meses) que quer viajar no tempo:");
+            var tempo = Console.ReadLine();
+            var validaTempo = validacoes.ValidaInteiro(tempo);
+            string nomeInvestimento = "";
+            if (!validaTempo)
+                throw new Exception("Erro");
+            var novaData = dataSistema.AddMonths(int.Parse(tempo));
+            if (novaData < dataSistema) 
+                throw new Exception("Não é possível ir de volta para o passado, Marty.");
+            Console.WriteLine(dataSistema = novaData);
+            Console.WriteLine($"Bem vindo ao futuro, Marty! Hoje é dia {dataSistema:dd MMMM} de {dataSistema:yyyy}.");
             Console.ReadKey();
         }
         else if (opt == "0")

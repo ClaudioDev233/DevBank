@@ -68,8 +68,9 @@ namespace DevBank.Entidades
             {
                 Console.WriteLine("Efetuando transferencia");
 
-                Console.WriteLine("Qual o numero da conta de destino?");
-                var contaDestino = validacoes.ValidaConta(Console.ReadLine());
+                
+                var contaDestino = sistema.ProcuraContaNaListaGeralDeContas(validacoes);
+                Console.Write(" de destino:");
 
                 Console.WriteLine("Qual o valor da transferencia?");
                 var valorTransferencia = Console.ReadLine();
@@ -83,8 +84,13 @@ namespace DevBank.Entidades
                 {
                     throw new Exception("Não é possivel continuar a transação pois os dados inseridos são inválidos");
                 }
+                var validaDiaDaSemana = validacoes.validaDiaDaSemana(dataSistema);
+                if (!validaDiaDaSemana)
+                    throw new Exception("Não é possivel realizar transferencias no fim de semana");
+
                 var novaTranferencia = conta.Transferencia(sistema, contaDestino, Decimal.Parse(valorTransferencia), dataSistema);
                 sistema.AddTranferencia(novaTranferencia);
+                Console.ReadKey();
             }
             if (option == "6")
             {
@@ -185,7 +191,7 @@ namespace DevBank.Entidades
             {
                 Console.WriteLine("Efetuando transferencia");
 
-                // var contaDestino = validacoes.ValidaConta(Console.ReadLine());
+                
                 var contaDestino = sistema.ProcuraContaNaListaGeralDeContas(validacoes);
                 Console.Write(" de destino:");
 
@@ -227,7 +233,7 @@ namespace DevBank.Entidades
                     throw new Exception("Erro, o valor inserido é invalido");
 
                 }
-                Console.WriteLine("insira o numero de meses que deixará seu valor investido:");
+                Console.WriteLine("Quantos meses deseja deixar seu valor investido?");
                 var tempoInvestimento = Console.ReadLine();
                 var validaTempoInvestimento =validacoes.ValidaInteiro(tempoInvestimento);
                 string nomeInvestimento = "";
@@ -336,10 +342,10 @@ namespace DevBank.Entidades
             {
                 Console.WriteLine("Efetuando transferencia");
 
-                Console.WriteLine("Qual o numero da conta de destino?");
-                var contaDestino = validacoes.ValidaConta(Console.ReadLine());
+                var contaDestino = sistema.ProcuraContaNaListaGeralDeContas(validacoes);
+                Console.Write(" de destino:");
 
-                Console.WriteLine("Qual o valor da transf?");
+                Console.WriteLine("Qual o valor da transferencia?");
                 var valorTransferencia = Console.ReadLine();
                 var validaTransferencia = validacoes.ValidaValor(valorTransferencia);
                 if (validaTransferencia == false)
@@ -351,12 +357,15 @@ namespace DevBank.Entidades
                 {
                     throw new Exception("Não é possivel continuar a transação pois os dados inseridos são inválidos");
                 }
+                var validaDiaDaSemana = validacoes.validaDiaDaSemana(dataSistema);
+                if (!validaDiaDaSemana)
+                    throw new Exception("Não é possivel realizar transferencias no fim de semana");
+
                 var novaTranferencia = conta.Transferencia(sistema, contaDestino, Decimal.Parse(valorTransferencia), dataSistema);
                 sistema.AddTranferencia(novaTranferencia);
                 Console.ReadKey();
-
             }
-            
+
             if (option == "6")
             {
                 conta.ValorChequeEspecial();

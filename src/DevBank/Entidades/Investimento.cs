@@ -16,10 +16,10 @@ namespace DevBank.Entidades
             DataRetirada = dataRetirada;
         }
 
-        public decimal ValorAplicado { get; set; }
-        public string TipoAplicacao { get; set; }
-        public DateTime DataAplicacao { get; set; }
-        public DateTime DataRetirada { get; set; }
+        public decimal ValorAplicado { get; private set; }
+        public string TipoAplicacao { get; private set; }
+        public DateTime DataAplicacao { get; private set; }
+        public DateTime DataRetirada { get; private set; }
 
         
     }

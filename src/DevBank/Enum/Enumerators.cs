@@ -8,11 +8,11 @@ namespace DevBank.Enum
 {
     public enum AgenciasEnum
     {
-    Florianópolis = 1, São_José = 2 , Biguaçu =3
+    Florianópolis = 1, São_José = 2 , Biguaçu = 3
 
     }
     public enum TipoContaEnum
     {
-        Corrente = 1 , Poupança=2, Investimento=3
+        Corrente = 1 , Poupança= 2, Investimento= 3
     }
 }
