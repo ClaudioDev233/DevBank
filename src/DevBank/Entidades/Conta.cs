@@ -10,12 +10,14 @@ namespace DevBank
         public string Nome { get; private set; }
         public string CPF { get; private set; }
         public string Endereco { get; private set; }
-        public decimal RendaMensal { get; private set; }
         public int NumeroConta { get; private set; }
+        public decimal RendaMensal { get; private set; }
+        public decimal Saldo { get; protected set; }
         public AgenciasEnum Agencia { get; private set; }
         public TipoContaEnum TipoConta { get; private set; }
-        public decimal Saldo { get; protected set; }
         public List<Transacao> ListaTransacoes { get; private set; }
+
+
         public Conta(string nome, string cPF, string endereco, decimal rendaMensal, AgenciasEnum agencia, TipoContaEnum tipoConta, int numeroConta)
         {
             Nome = nome;
@@ -29,29 +31,29 @@ namespace DevBank
             ListaTransacoes = new List<Transacao>();
 
         }
-        public virtual dynamic InformaçõesConta()
+        public virtual void InformacoesConta()
         {
-            return $"Ola {Nome}, seu saldo no momento é de R${Saldo}. Sua agencia é {Agencia} e o numero da sua conta é {NumeroConta}";
+            Console.WriteLine($"Ola {Nome}, seu saldo no momento é de R${Saldo}. Sua agencia é {Agencia} e o numero da sua conta é {NumeroConta}");
         }
-        public string RetornaSaldo()
+        public void RetornaSaldo()
         {
-            return $"Seu saldo é: {Saldo:C2}";
+            Console.WriteLine($"Seu saldo é: {Saldo:C2}");
         }
-        public string Deposito(decimal valor)
+        public void Deposito(decimal valor)
         {
             Saldo += valor;
             var transacao = new Transacao(NumeroConta, valor, "Deposito");
             ListaTransacoes.Add(transacao);
-            return $"O depósito no valor de {valor:C2} foi realizado com sucesso, seu novo saldo é de {Saldo:C2}";
+            Console.WriteLine($"O depósito no valor de {valor:C2} foi realizado com sucesso, seu novo saldo é de {Saldo:C2})");
         }
-        public virtual string Saque(decimal valor)
+        public virtual void Saque(decimal valor)
         {
             if (valor <= Saldo)
             {
                 Saldo -= valor;
                 var transacao = new Transacao(NumeroConta, valor, "Saque");
                 ListaTransacoes.Add(transacao);
-                return $"O saque no valor de {valor:C2} foi realizado com sucesso, seu novo saldo é de {Saldo:C2}";
+                Console.WriteLine($"O saque no valor de {valor:C2} foi realizado com sucesso, seu novo saldo é de {Saldo:C2}");
             }
             throw new Exception($"Não foi possivel realizar o saque pois seu saldo atual é de {Saldo:C2}");
 
@@ -61,7 +63,7 @@ namespace DevBank
             if (ListaTransacoes.Count == 0)
             {
 
-                throw new Exception("Ainda não foram efetuadas transações.aqui");
+                throw new Exception("Ainda não foram efetuadas transações.");
             }
             Console.WriteLine("Suas ultimas transações foram:");
             foreach (var transacao in ListaTransacoes)
@@ -78,27 +80,27 @@ namespace DevBank
 
             #region Verificação se a conta consta no banco de dados 
 
-            var contaExiste = listaContas.ListaDeContas.Find(conta => conta.NumeroConta == numeroContaDestino);
-            if (contaExiste == null)
-            {
-                throw new Exception($"A conta com o nunmero {numeroContaDestino} naõ existe no sistema");
+            //var contaExiste = listaContas.ListaDeContas.Find(conta => conta.NumeroConta == numeroContaDestino);
+            //if (contaExiste == null)
+            //{
+            //    throw new Exception($"A conta com o nunmero {numeroContaDestino} naõ existe no sistema");
 
-            }
+            //}
 
 
             #endregion
 
             #region Verifica se o dia não é fim de semana
 
-            if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
-            {
-                throw new Exception("Não é possivel realizar transferencias no fim de semana");
+            //if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
+            //{
+            //    throw new Exception("Não é possivel realizar transferencias no fim de semana");
 
-            }
+            //}
 
             #endregion
 
-            var contaDestino = listaContas.ListaDeContas.FirstOrDefault(conta => conta.NumeroConta == contaExiste.NumeroConta); //procura mas nao verifica
+            var contaDestino = listaContas.ListaDeContas.FirstOrDefault(conta => conta.NumeroConta == numeroContaDestino); //procura mas nao verifica
 
             #region Verifica se a conta destino não é a mesma conta que fará a tranferencia
 
@@ -134,7 +136,6 @@ namespace DevBank
             var transferencia = new Transferencia(NumeroConta, contaDestino.NumeroConta, valor);
             return transferencia;
         }
-
         public void AlteraDados(Validacoes validacao)
 
         {
@@ -186,6 +187,6 @@ namespace DevBank
             Agencia = (AgenciasEnum)agencia;
 
             Console.WriteLine("Alterações feitas com sucesso!");
-        }
+        } //ok!
     }
 }

@@ -18,6 +18,8 @@ while (true)
 
     {
         Console.Clear();
+        Console.WriteLine(dataSistema);
+
         Console.WriteLine("Ola! Seja bem vindo ao DevBank!");
         Console.WriteLine("------------------------------------------");
         Console.WriteLine("O que deseja fazer hoje?");
@@ -41,7 +43,8 @@ while (true)
 
 
 
-        } // falta validar as outras opcoes
+        }
+
         if (opt == "2")
         {
             Console.Clear();
@@ -51,20 +54,17 @@ while (true)
             if (numeroDaConta == null)
             {
 
-                
-                Console.WriteLine("Pressione algo para retornar ao inicio");
-                Console.ReadKey();//verificar se a conta existe no DB de contas - ok
+                throw new Exception("Conta não encontrada");
+               
 
             }
                
             var conta = sistema.RetornaContaEspecifica(numeroDaConta);
-            //ver qual é o tipo dessa conta
-
-            //suponhetamos que a conta existe no sistema, vai me retornar um inteiro que é o numero da conta
+           
             if (conta != null && conta.TipoConta == DevBank.Enum.TipoContaEnum.Poupança)
             {
                 var contaPoupanca = sistema.RetornaContaDoTipo("Poupança", numeroDaConta);
-                //aqui dentro eu procuro a conta na lista do seu tipo, no caso popança
+               
                 operacoes.OperacaoPoupanca(sistema, contaPoupanca, validacoes, dataSistema);
 
             }
@@ -82,7 +82,7 @@ while (true)
             }
             Console.WriteLine("Pressione algo para retornar ao inicio");
             Console.ReadKey();
-        } // funciona - checar 
+        } 
         if (opt == "3")
         {
 
@@ -90,8 +90,8 @@ while (true)
             Console.WriteLine("Pressione algo para retornar ao inicio");
             Console.ReadKey();
 
-           //ok
-        } // lista e passa nos testes
+          
+        }
         if (opt == "4")
         {
 
@@ -104,10 +104,10 @@ while (true)
         {
 
             Console.WriteLine("[5] Total do valor investido");
-            Console.WriteLine(sistema.RetornaValorInvestimentos());
+            sistema.RetornaValorInvestimentos();
             Console.WriteLine("Pressione algo para retornar ao inicio");
             Console.ReadKey();
-        } //precisa mudar o resto das contas
+        } 
 
         if (opt == "6")
         {
@@ -119,9 +119,16 @@ while (true)
 
             Console.WriteLine("Pressione algo para retornar ao inicio");
             Console.ReadKey();
-        } 
-       
-        else if(opt == "0")
+        }
+
+        if (opt == "7")
+        {
+            Console.WriteLine("Viagem no tempo");
+            var novaData = dataSistema.AddMonths(6);
+            Console.WriteLine(dataSistema =novaData);
+            Console.ReadKey();
+        }
+        else if (opt == "0")
         {
             Console.WriteLine("Até logo");
             break;

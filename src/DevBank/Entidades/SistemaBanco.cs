@@ -8,7 +8,6 @@ namespace DevBank.Entidades
 {
     public class SistemaBanco
     {
-         
 
         public List<Conta> ListaDeContas { get; private set; }
         public List<ContaCorrente> ListaDeContasCorrente { get; private set; }
@@ -25,137 +24,9 @@ namespace DevBank.Entidades
             ListaDeContasPoupanca = new List<ContaPoupanca>();
             ListaDeInvestimentos = new List<Investimento>();
         }
-        public void RetornaContas(Validacoes validacao)
-        {
-            if (ListaDeContas.Count == 0)
-            {
-                throw new Exception("Não há contas no sistema!");
-                
-            }
-
-            Console.WriteLine($"No momento existem {ListaDeContas.Count} conta(s) registradas.\n");
-            Console.WriteLine("Qual tipo conta de deseja listar?");
-            Console.WriteLine("[1] Contas Correntes");
-            Console.WriteLine("[2] Contas Poupança");
-            Console.WriteLine("[3] Contas Investimento");
-            string tipoConta = validacao.ValidaEscolha(Console.ReadLine());
-            string tipo = tipoConta;
-
-            switch (tipo)
-            {
-                case "1":
-                    if (ListaDeContasCorrente.Count == 0)
-                    {
-                        throw new Exception("Atualmente não existem contas do tipo Corrente registradas no sistema");
-
-                    }
-                    foreach (ContaCorrente conta in ListaDeContasCorrente)
-                    {
-
-                        Console.WriteLine("--------------------------------");
-                        Console.WriteLine($"\tNumero da Conta: {conta.NumeroConta};");
-                        Console.WriteLine($"\tProprietário: {conta.Nome};");
-                        Console.WriteLine($"\tTipo da Conta: {conta.TipoConta};");
-                        Console.WriteLine($"\tTipo da Conta: {conta.Agencia};");
-                        Console.WriteLine($"\tSaldo: {conta.Saldo}.");
-                        Console.WriteLine("--------------------------------\n");
-                    }
-                   
-                    break;
-
-                case "2":
-                    if (ListaDeContasPoupanca.Count == 0)
-                    {
-                        Console.WriteLine("Atualmente não existem contas do tipo Poupança registradas no sistema");
-
-                    }
-                    foreach (ContaPoupanca conta in ListaDeContasPoupanca)
-                    {
-
-                        Console.WriteLine("--------------------------------");
-                        Console.WriteLine($"\tNumero da Conta: {conta.NumeroConta};");
-                        Console.WriteLine($"\tProprietário: {conta.Nome};");
-                        Console.WriteLine($"\tTipo da Conta: {conta.TipoConta};");
-                        Console.WriteLine($"\tTipo da Conta: {conta.Agencia};");
-                        Console.WriteLine($"\tSaldo: {conta.Saldo}.");
-                        Console.WriteLine("--------------------------------\n");
-                    }
-
-                    break;
-
-                case "3":
-                    if (ListaDeContasInvestimento.Count == 0)
-                    {
-                        Console.WriteLine("Atualmente não existem contas do tipo Investimento registradas no sistema");
-
-
-                    }
-                    foreach (ContaInvestimento conta in ListaDeContasInvestimento)
-                    {
-
-                        Console.WriteLine("--------------------------------");
-                        Console.WriteLine($"\tNumero da Conta: {conta.NumeroConta};");
-                        Console.WriteLine($"\tProprietário: {conta.Nome};");
-                        Console.WriteLine($"\tTipo da Conta: {conta.TipoConta};");
-                        Console.WriteLine($"\tTipo da Conta: {conta.Agencia};");
-                        Console.WriteLine($"\tSaldo: {conta.Saldo}.");
-                        Console.WriteLine("--------------------------------\n");
-                    }
-
-                    break;
-                    
-
-
-                default:
-                    break;
-            }
-            
-          
-        }
-
-
         public void CriaListaTranferencias()
         {
             ListaDeTransferencias = new List<Transferencia>();
-        }
-        public void AddTranferencia(Transferencia transferencia)
-        {
-            if (transferencia != null)
-                ListaDeTransferencias.Add(transferencia);
-        }
-        public void AddInvestimento(Investimento investimento)
-        {
-            if (investimento == null)
-            throw new Exception("Investimento não pode ser criado");
-                ListaDeInvestimentos.Add(investimento);
-        }
-        public string RetornaValorInvestimentos()
-        {
-            if(ListaDeContasInvestimento.Count == 0)
-            throw new Exception("Não existem investimentos");
-
-             var soma = ListaDeInvestimentos.Sum(investimento => investimento.ValorAplicado);
-            if(soma == 0)
-            {
-                throw new Exception($"{soma:C2}");
-            }
-            return $"{soma:C2}";
-        }
-        public void RetornaTransferencias()
-        {
-            if (ListaDeTransferencias.Count == 0)
-                Console.Write("Não existem transações no sistema");
-            Console.WriteLine($"No momento existem {ListaDeTransferencias.Count} tranferencia(s) registradas:");
-            foreach (Transferencia transferencia in ListaDeTransferencias)
-            {
-
-                Console.WriteLine("--------------------------------");
-                Console.WriteLine($"\tProprietário: {transferencia.NumeroContaDestino}");
-                Console.WriteLine($"\tNumero da Conta: {transferencia.Valor}");
-                Console.WriteLine($"\tSaldo: {transferencia.Data}");
-                Console.WriteLine("--------------------------------\n");
-
-            }
         }
         public void CriarConta(Validacoes validacao) //criar validacoes e colocar aqui, no caso é validacao cpf endereco renda tipo de conta e agencia
         {
@@ -180,6 +51,11 @@ namespace DevBank.Entidades
 
             Console.WriteLine("Digite seu CPF:");
             var cpf = Console.ReadLine();
+            var validaCPF = validacao.validaCPF(cpf);
+            if (!validaCPF)
+            {
+                throw new Exception("CPF Inválido");
+            }
 
             Console.WriteLine("Digite sua renda mensal para ver as opções de conta disponíveis para você");
             var rendaMensal = Console.ReadLine();
@@ -220,7 +96,7 @@ namespace DevBank.Entidades
                 var conta = new ContaCorrente(nome, cpf, endereco, Decimal.Parse(rendaMensal), (Enum.AgenciasEnum)agencia, (Enum.TipoContaEnum)tipoConta, ListaDeContas.Count);
                 ListaDeContas.Add(conta);
                 ListaDeContasCorrente.Add(conta);
-                Console.WriteLine("Conta corrente criada com sucesso");
+                Console.WriteLine("Conta Corrente criada com sucesso");
                
             }
             if (tipoConta == 2)
@@ -238,42 +114,137 @@ namespace DevBank.Entidades
                 var conta = new ContaInvestimento(nome, cpf, endereco, Decimal.Parse(rendaMensal), (Enum.AgenciasEnum)agencia, (Enum.TipoContaEnum)tipoConta, ListaDeContas.Count);
                 ListaDeContas.Add(conta);
                 ListaDeContasInvestimento.Add(conta);
-                Console.WriteLine("Conta Poupança criada com sucesso");
+                Console.WriteLine("Conta Investimento criada com sucesso");
 
             }
     
         }
-        public void ListarTransacoesDeUmCliente(Conta conta)
+        public void RetornaValorInvestimentos()
         {
-      
-                conta.Extrato();
+            if(ListaDeContasInvestimento.Count == 0)
+            throw new Exception("Não existem investimentos");
 
-              
+             var soma = ListaDeInvestimentos.Sum(investimento => investimento.ValorAplicado);
+            Console.WriteLine("O total do valor investido é:");
+            if(soma == 0)
+            {
+                throw new Exception($"{soma:C2}");
+            }
+            Console.WriteLine($"{soma:C2}");
+        }
+        public void RetornaContas(Validacoes validacao)
+        {
+            if (ListaDeContas.Count == 0)
+            {
+                throw new Exception("Não há contas no sistema!");
+                
+            }
+
+            Console.WriteLine($"No momento existem {ListaDeContas.Count} conta(s) registradas.\n");
+            Console.WriteLine("Qual tipo conta de deseja listar?");
+            Console.WriteLine("[1] Contas Correntes");
+            Console.WriteLine("[2] Contas Poupança");
+            Console.WriteLine("[3] Contas Investimento");
+            string tipoConta = validacao.ValidaEscolha(Console.ReadLine());
+            string tipo = tipoConta;
+
+            switch (tipo)
+            {
+                case "1":
+                    if (ListaDeContasCorrente.Count == 0)
+                    {
+                        throw new Exception("Atualmente não existem contas do tipo Corrente registradas no sistema");
+
+                    }
+                    foreach (ContaCorrente conta in ListaDeContasCorrente)
+                    {
+
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine($"\tNumero da Conta: {conta.NumeroConta};");
+                        Console.WriteLine($"\tProprietário: {conta.Nome};");
+                        Console.WriteLine($"\tTipo da Conta: {conta.TipoConta};");
+                        Console.WriteLine($"\tTipo da Conta: {conta.Agencia};");
+                        Console.WriteLine($"\tSaldo: {conta.Saldo:C2}.");
+                        Console.WriteLine("--------------------------------\n");
+                    }
+                   
+                    break;
+
+                case "2":
+                    if (ListaDeContasPoupanca.Count == 0)
+                    {
+                        Console.WriteLine("Atualmente não existem contas do tipo Poupança registradas no sistema");
+
+                    }
+                    foreach (ContaPoupanca conta in ListaDeContasPoupanca)
+                    {
+
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine($"\tNumero da Conta: {conta.NumeroConta};");
+                        Console.WriteLine($"\tProprietário: {conta.Nome};");
+                        Console.WriteLine($"\tTipo da Conta: {conta.TipoConta};");
+                        Console.WriteLine($"\tTipo da Conta: {conta.Agencia};");
+                        Console.WriteLine($"\tSaldo: {conta.Saldo:C2}.");
+                        Console.WriteLine("--------------------------------\n");
+                    }
+
+                    break;
+
+                case "3":
+                    if (ListaDeContasInvestimento.Count == 0)
+                    {
+                        Console.WriteLine("Atualmente não existem contas do tipo Investimento registradas no sistema");
+
+
+                    }
+                    foreach (ContaInvestimento conta in ListaDeContasInvestimento)
+                    {
+
+                        Console.WriteLine("--------------------------------");
+                        Console.WriteLine($"\tNumero da Conta: {conta.NumeroConta};");
+                        Console.WriteLine($"\tProprietário: {conta.Nome};");
+                        Console.WriteLine($"\tTipo da Conta: {conta.TipoConta};");
+                        Console.WriteLine($"\tTipo da Conta: {conta.Agencia};");
+                        Console.WriteLine($"\tSaldo: {conta.Saldo:C2}.");
+                        Console.WriteLine("--------------------------------\n");
+                    }
+
+                    break;
+                    
+
+
+                default:
+                    break;
+            }
+            
+          
+        } 
+        public void RetornaTransferencias()
+        {
+            if (ListaDeTransferencias.Count == 0)
+                Console.Write("Não existem transações no sistema");
+            Console.WriteLine($"No momento existem {ListaDeTransferencias.Count} tranferencia(s) registradas:");
+            foreach (Transferencia transferencia in ListaDeTransferencias)
+            {
+
+                Console.WriteLine("--------------------------------");
+                Console.WriteLine($"\tProprietário: {transferencia.NumeroContaDestino}");
+                Console.WriteLine($"\tNumero da Conta: {transferencia.Valor}");
+                Console.WriteLine($"\tSaldo: {transferencia.Data}");
+                Console.WriteLine("--------------------------------\n");
+
+            }
         }
         public Conta? RetornaContaEspecifica(int numeroConta)
         {
 
             var contaExiste = ListaDeContas.FirstOrDefault(conta => conta.NumeroConta == numeroConta);
             if (contaExiste == null)
-                throw new Exception("");
+                throw new Exception("Erro");
 
-            //Console.WriteLine($"Olá {contaExiste.Nome}, seja bem vindo novamente a sua conta {contaExiste.TipoConta}!"); tirar isso daqui?
-            //Console.WriteLine($"O que deseja fazer hoje?!");
             return contaExiste;
         }
-        public dynamic? ProcuraContaNaListaGeralDeContas(Validacoes validacao)
-        {
-            Console.WriteLine("Olá, digite o numero de sua conta");
-            var numeroConta = validacao.ValidaInteiro(Console.ReadLine());
-            var contaExiste = ListaDeContas.FirstOrDefault(conta => conta.NumeroConta == numeroConta);
-            if (contaExiste == null)
-            {
-                throw new Exception($"A conta de número {numeroConta} não existe no sistema");
-                
-            }
-            return numeroConta;
-        }
-        public Conta RetornaContaDoTipo(string tipoConta, int numeroConta) // mudar 
+        public Conta RetornaContaDoTipo(string tipoConta, int numeroConta)
         {
             var tipo = tipoConta;
             switch (tipo)
@@ -302,7 +273,7 @@ namespace DevBank.Entidades
                 if (listaContasNegativas.Count == 0)
                 {
                     
-                   throw new Exception ("Não existem contas negativas no sistema. dentro");
+                   throw new Exception ("Não existem contas negativas no sistema.");
                 }
 
                 Console.WriteLine($"No momento existe(m){listaContasNegativas.Count} conta(s) no sistema sendo elas: \n");
@@ -323,6 +294,36 @@ namespace DevBank.Entidades
 
             throw new Exception ("Não existem contas negativas no sistema.");
            
+        }
+        public void AddTranferencia(Transferencia transferencia)
+        {
+            if (transferencia != null)
+                ListaDeTransferencias.Add(transferencia);
+        }
+        public void AddInvestimento(Investimento investimento)
+        {
+            if (investimento == null)
+            throw new Exception("Investimento não pode ser criado");
+                ListaDeInvestimentos.Add(investimento);
+        }
+        public void ListarTransacoesDeUmCliente(Conta conta)
+        {
+                conta.Extrato();
+        }
+        public dynamic? ProcuraContaNaListaGeralDeContas(Validacoes validacao)
+        {
+            Console.WriteLine("Digite o numero de conta");
+            var numeroConta = Console.ReadLine();
+            var validaNumeroConta = validacao.ValidaInteiro(numeroConta);
+            if (validaNumeroConta != true)
+                throw new Exception("Erro");
+            var contaExiste = ListaDeContas.FirstOrDefault(conta => conta.NumeroConta == int.Parse(numeroConta));
+            if (contaExiste == null)
+            {
+                throw new Exception($"A conta de número {numeroConta} não existe no sistema");
+                
+            }
+            return int.Parse(numeroConta);
         }
     }
 }

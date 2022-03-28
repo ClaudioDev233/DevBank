@@ -13,10 +13,7 @@ namespace DevBank.Entidades
             if (valor.Any(char.IsLetter) || valor.Any(char.IsWhiteSpace) || valor == "" || valor == null)
                 throw new Exception("O valor digitado é inválido");
             return true;
-            //Decimal.TryParse(valor, out decimal valorTransacao);
-            //if (validaValor == true)
-            // return valorTransacao;
-            // throw new Exception("Valor digitado é inválido");
+            
         }
         public dynamic? ValidaConta(string numeroConta)
         {
@@ -27,14 +24,11 @@ namespace DevBank.Entidades
                 return numeroContaValido;
             return null;
         }
-        public dynamic? ValidaInteiro(string inteiro)
+        public bool ValidaInteiro(string inteiro)
         {
             if (inteiro.Any(char.IsLetter) || inteiro.Any(char.IsWhiteSpace) || inteiro == "")
-                return null;
-            var validaNumero = Int32.TryParse(inteiro, out int numeroInteiroValido);
-            if (validaNumero == true)
-                return numeroInteiroValido;
-            return null;
+                throw new Exception("Formato inválido");
+            return true;
         }
         public string ValidaEscolha(string texto)
         {
@@ -58,5 +52,56 @@ namespace DevBank.Entidades
         }
         //public bool ValidaCPF(int cpf)
 
+        public bool validaCPF(string cpf)
+        {
+            if (cpf.Any(char.IsLetter) || cpf.Any(char.IsWhiteSpace) || cpf == "" || cpf == null)
+                throw new Exception("Cpf não foi digitado corretamente");
+
+            int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+            int[] multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+            string tempCpf;
+            string digito;
+            int soma;
+            int resto;
+            cpf = cpf.Trim();
+            cpf = cpf.Replace(".", "").Replace("-", "");
+            if (cpf.Length != 11)
+                return false;
+            tempCpf = cpf.Substring(0, 9);
+            soma = 0;
+
+            for (int i = 0; i < 9; i++)
+                soma += int.Parse(tempCpf[i].ToString()) * multiplicador1[i];
+            resto = soma % 11;
+            if (resto < 2)
+                resto = 0;
+            else
+                resto = 11 - resto;
+            digito = resto.ToString();
+            tempCpf = tempCpf + digito;
+            soma = 0;
+            for (int i = 0; i < 10; i++)
+                soma += int.Parse(tempCpf[i].ToString()) * multiplicador2[i];
+            resto = soma % 11;
+            if (resto < 2)
+                resto = 0;
+            else
+                resto = 11 - resto;
+            digito = digito + resto.ToString();
+            return cpf.EndsWith(digito);
+        }
+        
+        public bool validaDiaDaSemana(DateTime date)
+        {
+            if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
+            {
+                throw new Exception("Não é possivel realizar transferencias no fim de semana");
+
+            }
+            return true;
+        }
+
+
     }
 }
+

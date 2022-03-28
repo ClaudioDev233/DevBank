@@ -25,10 +25,10 @@ namespace DevBank.Entidades
             Data = DateTime.Now;
         }
 
-        public int NumeroContaOrigem {get;set;}
-        public int NumeroContaDestino { get; set; }
-        public decimal Valor { get; set; }
-        public string Tipo { get; set; }
-        public DateTime Data { get; set; }
+        public int NumeroContaOrigem {get;private set;}
+        public int NumeroContaDestino { get; private set; }
+        public decimal Valor { get;private set; }
+        public string Tipo { get; private set; }
+        public DateTime Data { get; private set; }
     }
 }

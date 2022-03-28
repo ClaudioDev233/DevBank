@@ -9,35 +9,17 @@ namespace DevBank.Entidades
 {
     public class ContaInvestimento : Conta
     {
-        public List<Investimento> ListaInvestimentos { get; set; }
+        public List<Investimento> ListaInvestimentos { get; private set; }
+      
+
         public ContaInvestimento(string nome, string cPF, string endereco, decimal rendaMensal, AgenciasEnum agencia, TipoContaEnum tipoConta, int numeroConta) : base(nome, cPF, endereco, rendaMensal, agencia,tipoConta, numeroConta)
         {
             ListaInvestimentos = new List<Investimento>();
         }
 
-        // no caso dos 3 o rendimento é diario
-        //lci 8% aa tempo minimo 6 meses // mensal //0,0214% diario
-        //lca 9%aa tempo minimo 12 meses
-        //CDB 10%aa tempo minimo 36 meses
-
-        //indicar valor aplicado
-        // tempo minimo da aplicacao
-        // se for LCI ou LCA valor da CDI (11,65% aa)
-        // mensagem perguntanto se deseja investic (criar uma classe investimentos)
-
-        public void Simulacao(decimal valorInvestido, DateTime dataSistema, int tempoDePermanencia)
-        {
-            var dataFimInvestimento = dataSistema.AddMonths((tempoDePermanencia)).Month;
-            var jurosPeloTempo = (decimal)Math.Pow(1 + 0.4994 / 100, dataFimInvestimento);
-            decimal montante = valorInvestido * jurosPeloTempo;
-            Console.WriteLine($"Em {tempoDePermanencia} meses, o investimento de {valorInvestido:C2} renderá{(montante - valorInvestido):C2}, ou um total de {montante:C2}");
-        }
         public string LCI(decimal valorInvestido, DateTime dataSistema, int tempoDePermanencia)
         {
-            // digitar o tempo que quer simular, o minimo são 6 meses
-            //depois verificar se o saldo da conta possui o valor do montante para realizar o investimento
-            //se sim gera um novo investimento a partir da simulacao
-            //se nao gera um erro
+       
             if (tempoDePermanencia < 6)
             {
 
@@ -54,10 +36,7 @@ namespace DevBank.Entidades
        
         public string LCA(decimal valorInvestido, DateTime dataSistema, int tempoDePermanencia)
         {
-            // digitar o tempo que quer simular, o minimo são 6 meses
-            //depois verificar se o saldo da conta possui o valor do montante para realizar o investimento
-            //se sim gera um novo investimento a partir da simulacao
-            //se nao gera um erro
+           
             if (tempoDePermanencia < 12)
             {
 
@@ -72,10 +51,7 @@ namespace DevBank.Entidades
           
         public string CDB(decimal valorInvestido, DateTime dataSistema, int tempoDePermanencia)
         {
-            // digitar o tempo que quer simular, o minimo são 6 meses
-            //depois verificar se o saldo da conta possui o valor do montante para realizar o investimento
-            //se sim gera um novo investimento a partir da simulacao
-            //se nao gera um erro
+           
             if (tempoDePermanencia < 12)
             {
 
@@ -88,6 +64,16 @@ namespace DevBank.Entidades
             return $"O seu dinheiro renderá : {montante:c2}, a uma taxa de 0.0265% ao dia";
         }
 
+        public void ListarInvestimento()
+        {
+            if (ListaInvestimentos.Count == 0)
+                throw new Exception("Não existem investimentos");
+            foreach(var investimento in ListaInvestimentos)
+            {
+                Console.WriteLine(investimento.DataAplicacao);
+                Console.WriteLine(investimento.ValorAplicado);
+            }
+        }
 
     }
 }
