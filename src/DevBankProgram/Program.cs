@@ -16,18 +16,18 @@ while (true)
     {
         Console.Clear();
 
-        Console.WriteLine("Ola! Seja bem vindo ao DevBank!");
+        Console.WriteLine("Olá! Seja bem vindo ao DevBank!!");
         Console.WriteLine($"Hoje é dia {dataSistema:dd MMMM} de {dataSistema:yyyy}. Agora são {dataSistema:H:mm}.");
         Console.WriteLine("------------------------------------------");
         Console.WriteLine("O que deseja fazer hoje?");
-        Console.WriteLine("[1] Criar uma nova conta?");
-        Console.WriteLine("[2] Verificar uma conta já existente?");
-        Console.WriteLine("[3] Listar contas");
-        Console.WriteLine("[4] Listar contas negativadas");
-        Console.WriteLine("[5] Total do valor investido");
-        Console.WriteLine("[6] Transações de um cliente específico");
-        Console.WriteLine("[7] Viagem no tempo");
-        Console.WriteLine("[0] Sair");
+        Console.WriteLine("[1] Criar uma nova conta.");
+        Console.WriteLine("[2] Verificar uma conta já existente.");
+        Console.WriteLine("[3] Listar contas.");
+        Console.WriteLine("[4] Listar contas negativadas.");
+        Console.WriteLine("[5] Total do valor investido.");
+        Console.WriteLine("[6] Transações de um cliente específico.");
+        Console.WriteLine("[7] Viagem no tempo.");
+        Console.WriteLine("[0] Sair.");
         var opt = Console.ReadLine();
 
 
@@ -35,7 +35,7 @@ while (true)
         {
             Console.Clear();
             sistema.CriarConta(validacoes);
-            Console.WriteLine("Pressione algo para voltar");
+            Console.WriteLine("Pressione algo para voltar.");
             Console.ReadKey();
 
 
@@ -82,7 +82,7 @@ while (true)
         } 
         if (opt == "3")
         {
-
+            Console.Clear();
             sistema.RetornaContas(validacoes);
             Console.WriteLine("Pressione algo para retornar ao inicio");
             Console.ReadKey();
@@ -91,8 +91,8 @@ while (true)
         }
         if (opt == "4")
         {
-
-            Console.WriteLine("[4] Listar contas negativadas");
+           
+            Console.Clear();
             sistema.RetornaContasNegativadas();
             Console.WriteLine("Pressione algo para retornar ao inicio");
             Console.ReadKey();
@@ -100,7 +100,7 @@ while (true)
         if (opt == "5")
         {
 
-            Console.WriteLine("[5] Total do valor investido");
+            Console.Clear();
             sistema.RetornaValorInvestimentos();
             Console.WriteLine("Pressione algo para retornar ao inicio");
             Console.ReadKey();
@@ -108,8 +108,8 @@ while (true)
 
         if (opt == "6")
         {
-            
-         var numeroConta =  sistema.ProcuraContaNaListaGeralDeContas(validacoes);
+            Console.Clear();
+            var numeroConta =  sistema.ProcuraContaNaListaGeralDeContas(validacoes);
             var conta = sistema.RetornaContaEspecifica(numeroConta);
             if(conta != null)
             sistema.ListarTransacoesDeUmCliente(conta);
@@ -120,11 +120,11 @@ while (true)
 
         if (opt == "7")
         {
-            Console.WriteLine("Viagem no tempo");
+            Console.Clear();
+            Console.WriteLine("Olá Marty, deseja viajar no tempo?");
             Console.WriteLine("Digite o número (em meses) que quer viajar no tempo:");
             var tempo = Console.ReadLine();
             var validaTempo = validacoes.ValidaInteiro(tempo);
-            string nomeInvestimento = "";
             if (!validaTempo)
                 throw new Exception("Erro");
             var novaData = dataSistema.AddMonths(int.Parse(tempo));

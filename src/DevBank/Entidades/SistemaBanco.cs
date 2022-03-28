@@ -30,63 +30,69 @@ namespace DevBank.Entidades
         }
         public void CriarConta(Validacoes validacao) 
         {
-            Console.WriteLine("Ok, vamos criar uma nova conta!");
+            Console.WriteLine("Ok, vamos criar uma nova conta!\n");
 
-            Console.WriteLine("Por favor, digite seu nome:");
+            Console.WriteLine("Por favor, digite seu nome:\n");
             var nome = Console.ReadLine();
+            Console.WriteLine();
             var validaNome = validacao.ValidaNome(nome);
             if (!validaNome)
             {
-                throw new Exception("Nome Invalido");  
+                throw new Exception("Nome Invalido.\n");  
             }
 
-            Console.WriteLine("Por favor, digite seu endereço:");
+            Console.WriteLine("Por favor, digite seu endereço:\n");
             var endereco = Console.ReadLine();
+            Console.WriteLine();
             var validaEndereco = validacao.ValidaEndereço(endereco);
 
             if (!validaEndereco)
             {
-                throw new Exception("Endereço inválido");
+                throw new Exception("Endereço inválido.\n");
             }
 
-            Console.WriteLine("Digite seu CPF:");
+            Console.WriteLine("Digite seu CPF (###.###.###-##) :\n");
             var cpf = Console.ReadLine();
+            Console.WriteLine();
             var validaCPF = validacao.validaCPF(cpf);
             if (!validaCPF)
             {
-                throw new Exception("CPF Inválido");
+                throw new Exception("CPF Inválido.\n");
             }
 
-            Console.WriteLine("Digite sua renda mensal para ver as opções de conta disponíveis para você");
+            Console.WriteLine("Qual o valor da sua renda mensal?\n");
             var rendaMensal = Console.ReadLine();
+            Console.WriteLine();
             var validaRenda = validacao.ValidaValor(rendaMensal);
 
             if (!validaRenda)
             {
-                throw new Exception("Formato da renda inválido");
+                throw new Exception("Formato da renda inválido.\n");
             }
 
-            Console.WriteLine("Escolha o tipo de conta que deseja abrir:");
+            Console.WriteLine("Escolha o tipo de conta que deseja abrir:\n");
             Console.WriteLine("[1] Conta Corrente.");
             Console.WriteLine("[2] Conta Poupança.");
             Console.WriteLine("[3] Conta Investimento.\n");
 
             var tipoConta = Int32.Parse(Console.ReadLine());
+            Console.WriteLine();
             if (tipoConta > 3 || tipoConta < 1)
             {
-                throw new Exception("Tipo conta escolhido não existe");
+                throw new Exception("Tipo conta escolhido não existe.\n");
                 
             }
 
-            Console.WriteLine("Em qual agencia deseja abrir sua conta?");
-            Console.WriteLine("[1] 001 - Florianópolis");
-            Console.WriteLine("[2] 002 - São José");
-            Console.WriteLine("[3] 003 - Biguaçu");
+            Console.WriteLine("Em qual agencia deseja abrir sua conta?\n");
+            Console.WriteLine("[1] 001 - Florianópolis.");
+            Console.WriteLine("[2] 002 - São José.");
+            Console.WriteLine("[3] 003 - Biguaçu.\n");
 
             var agencia = Int32.Parse(Console.ReadLine());
+            Console.WriteLine();
             if (agencia > 3 || agencia < 1)
             {
-                throw new Exception("Agencia não encontrada");
+                throw new Exception("Agencia não encontrada.\n");
                
             }
             
@@ -96,7 +102,7 @@ namespace DevBank.Entidades
                 var conta = new ContaCorrente(nome, cpf, endereco, Decimal.Parse(rendaMensal), (Enum.AgenciasEnum)agencia, (Enum.TipoContaEnum)tipoConta, ListaDeContas.Count);
                 ListaDeContas.Add(conta);
                 ListaDeContasCorrente.Add(conta);
-                Console.WriteLine("Conta Corrente criada com sucesso");
+                Console.WriteLine("Conta Corrente criada com sucesso!\n");
                
             }
             if (tipoConta == 2)
@@ -105,7 +111,7 @@ namespace DevBank.Entidades
                 var conta = new ContaPoupanca(nome, cpf, endereco, Decimal.Parse(rendaMensal), (Enum.AgenciasEnum)agencia, (Enum.TipoContaEnum)tipoConta, ListaDeContas.Count);
                 ListaDeContas.Add(conta);
                 ListaDeContasPoupanca.Add(conta);
-                Console.WriteLine("Conta Poupança criada com sucesso");
+                Console.WriteLine("Conta Poupança criada com sucesso!\n");
                 
             }
             if (tipoConta == 3)
@@ -114,7 +120,7 @@ namespace DevBank.Entidades
                 var conta = new ContaInvestimento(nome, cpf, endereco, Decimal.Parse(rendaMensal), (Enum.AgenciasEnum)agencia, (Enum.TipoContaEnum)tipoConta, ListaDeContas.Count);
                 ListaDeContas.Add(conta);
                 ListaDeContasInvestimento.Add(conta);
-                Console.WriteLine("Conta Investimento criada com sucesso");
+                Console.WriteLine("Conta Investimento criada com sucesso!\n");
 
             }
     
@@ -122,10 +128,10 @@ namespace DevBank.Entidades
         public void RetornaValorInvestimentos()
         {
             if(ListaDeContasInvestimento.Count == 0)
-            throw new Exception("Não existem investimentos");
+            throw new Exception("Não existem investimentos.\n");
 
              var soma = ListaDeInvestimentos.Sum(investimento => investimento.ValorAplicado);
-            Console.WriteLine("O total do valor investido é:");
+            Console.WriteLine("O total do valor investido é:\n");
             if(soma == 0)
             {
                 throw new Exception($"{soma:C2}");
@@ -141,10 +147,10 @@ namespace DevBank.Entidades
             }
 
             Console.WriteLine($"No momento existem {ListaDeContas.Count} conta(s) registradas.\n");
-            Console.WriteLine("Qual tipo conta de deseja listar?");
-            Console.WriteLine("[1] Contas Correntes");
-            Console.WriteLine("[2] Contas Poupança");
-            Console.WriteLine("[3] Contas Investimento");
+            Console.WriteLine("Qual tipo conta de deseja listar?\n");
+            Console.WriteLine("[1] Contas Correntes.");
+            Console.WriteLine("[2] Contas Poupança.");
+            Console.WriteLine("[3] Contas Investimento.\n");
             string tipoConta = validacao.ValidaEscolha(Console.ReadLine());
             string tipo = tipoConta;
 
@@ -153,7 +159,7 @@ namespace DevBank.Entidades
                 case "1":
                     if (ListaDeContasCorrente.Count == 0)
                     {
-                        throw new Exception("Atualmente não existem contas do tipo Corrente registradas no sistema");
+                        throw new Exception("Atualmente não existem contas do tipo Corrente registradas no sistema.\n");
 
                     }
                     foreach (ContaCorrente conta in ListaDeContasCorrente)
@@ -173,7 +179,7 @@ namespace DevBank.Entidades
                 case "2":
                     if (ListaDeContasPoupanca.Count == 0)
                     {
-                        Console.WriteLine("Atualmente não existem contas do tipo Poupança registradas no sistema");
+                        Console.WriteLine("Atualmente não existem contas do tipo Poupança registradas no sistema.\n");
 
                     }
                     foreach (ContaPoupanca conta in ListaDeContasPoupanca)
@@ -193,7 +199,7 @@ namespace DevBank.Entidades
                 case "3":
                     if (ListaDeContasInvestimento.Count == 0)
                     {
-                        Console.WriteLine("Atualmente não existem contas do tipo Investimento registradas no sistema");
+                        Console.WriteLine("Atualmente não existem contas do tipo Investimento registradas no sistema.\n");
 
 
                     }
@@ -262,7 +268,7 @@ namespace DevBank.Entidades
 
                     break;
             }
-            throw new Exception("Nenhuma conta foi encontrada");
+            throw new Exception("Nenhuma conta foi encontrada.");
         }
         public void RetornaContasNegativadas()
         {
@@ -303,7 +309,7 @@ namespace DevBank.Entidades
         public void AddInvestimento(Investimento investimento)
         {
             if (investimento == null)
-            throw new Exception("Investimento não pode ser criado");
+            throw new Exception("Investimento não pode ser criado.");
                 ListaDeInvestimentos.Add(investimento);
         }
         public void ListarTransacoesDeUmCliente(Conta conta)
@@ -312,7 +318,7 @@ namespace DevBank.Entidades
         }
         public dynamic? ProcuraContaNaListaGeralDeContas(Validacoes validacao)
         {
-            Console.WriteLine("Digite o numero de conta");
+            Console.WriteLine("Digite o número de conta");
             var numeroConta = Console.ReadLine();
             var validaNumeroConta = validacao.ValidaInteiro(numeroConta);
             if (validaNumeroConta != true)
@@ -320,7 +326,7 @@ namespace DevBank.Entidades
             var contaExiste = ListaDeContas.FirstOrDefault(conta => conta.NumeroConta == int.Parse(numeroConta));
             if (contaExiste == null)
             {
-                throw new Exception($"A conta de número {numeroConta} não existe no sistema");
+                throw new Exception($"A conta de número {numeroConta} não existe no sistema.");
                 
             }
             return int.Parse(numeroConta);

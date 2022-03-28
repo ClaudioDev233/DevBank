@@ -33,18 +33,18 @@ namespace DevBank
         }
         public virtual void InformacoesConta()
         {
-            Console.WriteLine($"Ola {Nome}, seu saldo no momento é de R${Saldo}. Sua agencia é {Agencia} e o numero da sua conta é {NumeroConta}");
+            Console.WriteLine($"Ola {Nome}, seu saldo no momento é de R${Saldo}. Sua agencia é {Agencia} e o numero da sua conta é {NumeroConta}.\n");
         }
         public void RetornaSaldo()
         {
-            Console.WriteLine($"Seu saldo é: {Saldo:C2}");
+            Console.WriteLine($"Seu saldo é: {Saldo:C2}.");
         }
         public void Deposito(decimal valor)
         {
             Saldo += valor;
             var transacao = new Transacao(NumeroConta, valor, "Deposito");
             ListaTransacoes.Add(transacao);
-            Console.WriteLine($"O depósito no valor de {valor:C2} foi realizado com sucesso, seu novo saldo é de {Saldo:C2})");
+            Console.WriteLine($"O depósito no valor de {valor:C2} foi realizado com sucesso, seu novo saldo é de {Saldo:C2}.");
         }
         public virtual void Saque(decimal valor)
         {
@@ -53,9 +53,9 @@ namespace DevBank
                 Saldo -= valor;
                 var transacao = new Transacao(NumeroConta, valor, "Saque");
                 ListaTransacoes.Add(transacao);
-                Console.WriteLine($"O saque no valor de {valor:C2} foi realizado com sucesso, seu novo saldo é de {Saldo:C2}");
+                Console.WriteLine($"O saque no valor de {valor:C2} foi realizado com sucesso, seu novo saldo é de {Saldo:C2}.");
             }
-            throw new Exception($"Não foi possivel realizar o saque pois seu saldo atual é de {Saldo:C2}");
+            throw new Exception($"Não foi possível realizar o saque, pois seu saldo atual é de {Saldo:C2}.");
 
         }
         public void Extrato()
@@ -65,12 +65,12 @@ namespace DevBank
 
                 throw new Exception("Ainda não foram efetuadas transações.");
             }
-            Console.WriteLine("Suas ultimas transações foram:");
+            Console.WriteLine("Suas últimas transações foram:\n");
             foreach (var transacao in ListaTransacoes)
             {
-                Console.WriteLine($"Data : {transacao.Data}");
-                Console.WriteLine($"Valor: {transacao.Valor:C2}");
-                Console.WriteLine($"Tipo: {transacao.Tipo}");
+                Console.WriteLine($"Data : {transacao.Data}.");
+                Console.WriteLine($"Valor: {transacao.Valor:C2}.");
+                Console.WriteLine($"Tipo: {transacao.Tipo}.");
             }
         }
         public virtual Transferencia? Transferencia(SistemaBanco listaContas, int numeroContaDestino, decimal valor, DateTime dataSistema)
@@ -82,24 +82,24 @@ namespace DevBank
 
             if (NumeroConta == contaDestino.NumeroConta)
             {
-                throw new Exception("Não pode transferir para sua propria conta");
+                throw new Exception("Não é possível transferir para sua própria conta.");
 
             }
 
             if (valor > Saldo)
             {
-                throw new Exception("Saldo Insuficiente");
+                throw new Exception("Saldo insuficiente.");
 
             }
 
             Saldo -= valor;
             contaDestino.Saldo += valor;
 
-            var transacao = new Transacao(NumeroConta, contaDestino.NumeroConta, valor, "transferencia");
+            var transacao = new Transacao(NumeroConta, contaDestino.NumeroConta, valor, "Transferência");
             ListaTransacoes.Add(transacao);
             contaDestino.ListaTransacoes.Add(transacao);
 
-            Console.WriteLine($"A transferencia foi feita com sucesso, o novo saldo de sua conta é {Saldo:C2}");
+            Console.WriteLine($"A transferência foi realizada com sucesso, o novo saldo de sua conta é {Saldo:C2}.");
 
             var transferencia = new Transferencia(NumeroConta, contaDestino.NumeroConta, valor);
             return transferencia;
@@ -114,7 +114,7 @@ namespace DevBank
             var validaNome = validacao.ValidaNome(nome);
             if (!validaNome)
             {
-                throw new Exception("Nome Invalido");
+                throw new Exception("Nome inválido.");
             }
 
             Console.WriteLine("Por favor, digite seu endereço:");
@@ -123,27 +123,27 @@ namespace DevBank
 
             if (!validaEndereco)
             {
-                throw new Exception("Endereço inválido");
+                throw new Exception("Endereço inválido.");
             }
 
-            Console.WriteLine("Digite sua nova renda mensal");
+            Console.WriteLine("Digite sua nova renda mensal:");
             var rendaMensal = Console.ReadLine();
             var validaRenda = validacao.ValidaValor(rendaMensal);
 
             if (!validaRenda)
             {
-                throw new Exception("Formato da renda inválido");
+                throw new Exception("Formato da renda inválido.");
             }
 
-            Console.WriteLine("Para qual agencia edseja migrar?");
-            Console.WriteLine("[1] 001 - Florianópolis");
-            Console.WriteLine("[2] 002 - São José");
-            Console.WriteLine("[3] 003 - Biguaçu");
+            Console.WriteLine("Para qual agencia deseja migrar?");
+            Console.WriteLine("[1] 001 - Florianópolis.");
+            Console.WriteLine("[2] 002 - São José.");
+            Console.WriteLine("[3] 003 - Biguaçu.");
 
             var agencia = Int32.Parse(Console.ReadLine());
             if (agencia > 3 || agencia < 1)
             {
-                throw new Exception("Agencia não encontrada");
+                throw new Exception("Agencia não encontrada.");
 
             }
 

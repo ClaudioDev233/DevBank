@@ -27,27 +27,27 @@ namespace DevBank.Entidades
         public bool ValidaInteiro(string inteiro)
         {
             if (inteiro.Any(char.IsLetter) || inteiro.Any(char.IsWhiteSpace) || inteiro == "")
-                throw new Exception("Formato inválido");
+                throw new Exception("Formato inválido.");
             return true;
         }
         public string ValidaEscolha(string texto)
         {
             if (texto.Any(char.IsLetter) || texto.Any(char.IsWhiteSpace) || texto == "")
-                throw new Exception("Opção inválida");
+                throw new Exception("Opção inválida.");
             return texto;
         }
 
         public bool ValidaNome(string nome)
         {
             if (nome.Any(char.IsDigit) == true || nome == "" || nome == null)
-                throw new Exception("O nome inserido é inválido");
+                throw new Exception("O nome inserido é inválido.");
             return true;
         }
         
         public bool ValidaEndereço(string endereço)
         {
             if (endereço.Any(char.IsDigit) == true || endereço == ""|| endereço == null)
-                throw new Exception("O endereço inserido é inválido");
+                throw new Exception("O endereço inserido é inválido.");
             return true;
         }
         
@@ -55,7 +55,7 @@ namespace DevBank.Entidades
         public bool validaCPF(string cpf)
         {
             if (cpf.Any(char.IsLetter) || cpf.Any(char.IsWhiteSpace) || cpf == "" || cpf == null)
-                throw new Exception("Cpf não foi digitado corretamente");
+                throw new Exception("Cpf não foi digitado corretamente.");
 
             int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             int[] multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
@@ -95,7 +95,7 @@ namespace DevBank.Entidades
         {
             if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
             {
-                throw new Exception("Não é possivel realizar transferencias no fim de semana");
+                throw new Exception("Não é possivel realizar transferencias no fim de semana.");
 
             }
             return true;

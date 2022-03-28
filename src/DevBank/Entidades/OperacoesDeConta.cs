@@ -10,6 +10,8 @@ namespace DevBank.Entidades
     {
         public void OperacaoPoupanca(SistemaBanco sistema, ContaPoupanca conta, Validacoes validacoes, DateTime dataSistema)
         {
+            Console.Clear();
+            conta.InformacoesConta();
             Console.WriteLine("[1] Saque");
             Console.WriteLine("[2] Deposito");
             Console.WriteLine("[3] Verificar Saldo");
@@ -21,11 +23,13 @@ namespace DevBank.Entidades
             var option = Console.ReadLine();
             if (option == "0")
             {
+                Console.Clear();
                 Console.WriteLine("Pressione algo para voltar");
                 Console.ReadKey();
             }
             if (option == "1")
             {
+                Console.Clear();
                 Console.WriteLine("Efetuando saque, insira o valor:");
                 var valorSaque = Console.ReadLine();
                 var validaSaque = validacoes.ValidaValor(valorSaque);
@@ -40,6 +44,7 @@ namespace DevBank.Entidades
             } 
             if (option == "2")
             {
+                Console.Clear();
                 Console.WriteLine("Efetuando deposito, insira o valor:");
                 var valorDeposito = Console.ReadLine();
                 var validaDeposito = validacoes.ValidaValor(valorDeposito);
@@ -54,6 +59,7 @@ namespace DevBank.Entidades
             } 
             if (option == "3")
             {
+                Console.Clear();
                 Console.WriteLine("Verificando saldo ....");
                 conta.RetornaSaldo();
                 Console.ReadKey();
@@ -66,6 +72,7 @@ namespace DevBank.Entidades
             }
             if (option == "5")
             {
+                Console.Clear();
                 Console.WriteLine("Efetuando transferencia");
 
                 
@@ -94,6 +101,7 @@ namespace DevBank.Entidades
             }
             if (option == "6")
             {
+                Console.Clear();
                 Console.WriteLine("Iniciando simulação");
 
                 Console.WriteLine("Qual o valor da transf?");
@@ -125,12 +133,15 @@ namespace DevBank.Entidades
             }
             if (option == "7")
             {
+                Console.Clear();
                 Console.WriteLine("Alterar Dados");
                 conta.AlteraDados(validacoes);
             }
         }
         public void OperacaoInvestimento(SistemaBanco sistema, ContaInvestimento conta, Validacoes validacoes, DateTime dataSistema)
         {
+            Console.Clear();
+            conta.InformacoesConta();
 
             Console.WriteLine("[1] Saque");
             Console.WriteLine("[2] Deposito");
@@ -143,17 +154,19 @@ namespace DevBank.Entidades
             var option = Console.ReadLine();
             if (option == "0")
             {
-                Console.WriteLine("Pressione algo para voltar");
+                Console.Clear();
+                Console.WriteLine("Pressione algo para voltar.");
                 Console.ReadKey();
             }
             if (option == "1")
             {
+                Console.Clear();
                 Console.WriteLine("Efetuando saque, insira o valor:");
                 var valorSaque = Console.ReadLine();
                 var validaSaque = validacoes.ValidaValor(valorSaque);
                 if (validaSaque == false)
                 {
-                    throw new Exception("Erro, o valor inserido é invalido");
+                    throw new Exception("Erro, o valor inserido é invalido.");
 
                 }
                 conta.Saque(Decimal.Parse(valorSaque));
@@ -162,7 +175,8 @@ namespace DevBank.Entidades
             }
             if (option == "2")
             {
-                Console.WriteLine("Efetuando deposito, insira o valor:");
+                Console.Clear();
+                Console.WriteLine("Efetuando depósito, insira o valor:");
                 var valorDeposito = Console.ReadLine();
                 var validaDeposito = validacoes.ValidaValor(valorDeposito);
                 if (validaDeposito == false)
@@ -176,31 +190,33 @@ namespace DevBank.Entidades
             }
             if (option == "3")
             {
+                Console.Clear();
                 Console.WriteLine("Verificando saldo ....");
                 conta.RetornaSaldo();
                 Console.ReadKey();
             }
             if (option == "4")
             {
+                Console.Clear();
                 Console.WriteLine("Verificando extrato ....");
-                conta.InformacoesConta();
                 conta.Extrato();
                 Console.ReadKey();
             }
             if (option == "5")
             {
-                Console.WriteLine("Efetuando transferencia");
+                Console.Clear();
+                Console.WriteLine("Efetuando transferência");
 
                 
                 var contaDestino = sistema.ProcuraContaNaListaGeralDeContas(validacoes);
                 Console.Write(" de destino:");
 
-                Console.WriteLine("Qual o valor da transferencia?");
+                Console.WriteLine("Qual o valor da transferência?");
                 var valorTransferencia = Console.ReadLine();
                 var validaTransferencia = validacoes.ValidaValor(valorTransferencia);
                 if (validaTransferencia == false)
                 {
-                    throw new Exception("O valor digitado é inválido");
+                    throw new Exception("O valor digitado é inválido.");
 
                 }
                 if (contaDestino == null || valorTransferencia == null)
@@ -209,7 +225,7 @@ namespace DevBank.Entidades
                 }
                 var validaDiaDaSemana = validacoes.validaDiaDaSemana(dataSistema);
                 if (!validaDiaDaSemana)
-                    throw new Exception("Não é possivel realizar transferencias no fim de semana");
+                    throw new Exception("Não é possivel realizar transferências no fim de semana.");
 
                 var novaTranferencia = conta.Transferencia(sistema, contaDestino, Decimal.Parse(valorTransferencia), dataSistema);
                 sistema.AddTranferencia(novaTranferencia);
@@ -217,23 +233,24 @@ namespace DevBank.Entidades
             }
             if (option == "6")
             {
-                Console.WriteLine("qual tipo de investimento voce deseja fazer?");
-                Console.WriteLine("1 LCI - Permanencia minima 6 meses");
-                Console.WriteLine("2 LCA - Permanencia minima 12 meses");
-                Console.WriteLine("3 CDB - Permanencia minima 36 meses");
+                Console.Clear();
+                Console.WriteLine("Qual o tipo de investimento que deseja realizar?");
+                Console.WriteLine("1 LCI - Permanência minima 6 meses - 8% ao ano.");
+                Console.WriteLine("2 LCA - Permanência minima 12 meses - 9% ao ano.");
+                Console.WriteLine("3 CDB - Permanência minima 36 meses - 10% ao ano.");
                 var tipoInvestimento = validacoes.ValidaEscolha(Console.ReadLine());
                 if(tipoInvestimento == null)
-                    throw new Exception("Tipo de investimento invalido");
+                    throw new Exception("Tipo de investimento inválido.");
 
-                Console.WriteLine("Qual o valor do investimento??");
+                Console.WriteLine("Qual o valor do investimento?");
                 var valorInvestimento = Console.ReadLine();
                 bool validaInvestimento = validacoes.ValidaValor(valorInvestimento);
                 if (validaInvestimento == false)
                 {
-                    throw new Exception("Erro, o valor inserido é invalido");
+                    throw new Exception("Erro, o valor inserido é inválido.");
 
                 }
-                Console.WriteLine("Quantos meses deseja deixar seu valor investido?");
+                Console.WriteLine("Quantos meses deseja deixar o valor investido?");
                 var tempoInvestimento = Console.ReadLine();
                 var validaTempoInvestimento =validacoes.ValidaInteiro(tempoInvestimento);
                 string nomeInvestimento = "";
@@ -241,23 +258,23 @@ namespace DevBank.Entidades
                     throw new Exception("Erro");
                 if(tipoInvestimento == "1")
                 {
-                 Console.WriteLine(conta.LCI(Decimal.Parse(valorInvestimento), dataSistema, int.Parse(tempoInvestimento)));
+                conta.LCI(Decimal.Parse(valorInvestimento), dataSistema, int.Parse(tempoInvestimento));
                     nomeInvestimento = "LCI";
                 }
                 if (tipoInvestimento == "2")
                 {
-                    Console.WriteLine(conta.LCA(Decimal.Parse(valorInvestimento), dataSistema, int.Parse(tempoInvestimento)));
+                    conta.LCA(Decimal.Parse(valorInvestimento), dataSistema, int.Parse(tempoInvestimento));
                     nomeInvestimento = "LCA";
                 }
                 if (tipoInvestimento == "3")
                 {
-                    Console.WriteLine(conta.CDB(Decimal.Parse(valorInvestimento), dataSistema, int.Parse(tempoInvestimento)));
+                    conta.CDB(Decimal.Parse(valorInvestimento), dataSistema, int.Parse(tempoInvestimento));
                     nomeInvestimento = "CDB";
                 }
 
-                Console.WriteLine("Deseja investir o valor?");
-                Console.WriteLine("[1] Sim");
-                Console.WriteLine("[2] Não");
+                Console.WriteLine("Deseja realizar o investimento simulado?");
+                Console.WriteLine("[1] Sim.");
+                Console.WriteLine("[2] Não.");
                 var escolha = validacoes.ValidaEscolha(Console.ReadLine());
                 if (escolha == null || escolha == "2")
                     throw new Exception("O investimento não será realizado.");
@@ -270,12 +287,14 @@ namespace DevBank.Entidades
             }
             if (option == "7")
             {
+                Console.Clear();
                 Console.WriteLine("Alterar Dados");
                 conta.AlteraDados(validacoes);
                 Console.ReadKey();
             }
             if(option == "8")
             {
+                Console.Clear();
                 conta.ListarInvestimento();
             }
             
@@ -283,7 +302,8 @@ namespace DevBank.Entidades
         }
         public void OperacaoCorrente(SistemaBanco sistema, ContaCorrente conta, Validacoes validacoes, DateTime dataSistema)
         {
-
+            Console.Clear();
+            conta.InformacoesConta();
             Console.WriteLine("[1] Saque");
             Console.WriteLine("[2] Deposito");
             Console.WriteLine("[3] Verificar Saldo");
@@ -295,17 +315,19 @@ namespace DevBank.Entidades
             var option = Console.ReadLine();
             if (option == "0")
             {
-                Console.WriteLine("Pressione algo para voltar");
+                Console.Clear();
+                Console.WriteLine("Pressione algo para voltar.");
                 Console.ReadKey();
             }
             if (option == "1")
             {
+                Console.Clear();
                 Console.WriteLine("Efetuando saque, insira o valor:");
                 var valorSaque = Console.ReadLine();
                 var validaSaque = validacoes.ValidaValor(valorSaque);
                 if (validaSaque == false)
                 {
-                    throw new Exception("Erro, o valor inserido é invalido");
+                    throw new Exception("Erro, o valor inserido é invalido.");
                     
                 }
                 conta.Saque(Decimal.Parse(valorSaque));
@@ -314,7 +336,8 @@ namespace DevBank.Entidades
             }
             if (option == "2")
             {
-                Console.WriteLine("Efetuando deposito, insira o valor:");
+                Console.Clear();
+                Console.WriteLine("Efetuando depósito, insira o valor:");
                 var valorDeposito = Console.ReadLine();
                 var validaDeposito = validacoes.ValidaValor(valorDeposito);
                 if (validaDeposito == false)
@@ -328,18 +351,21 @@ namespace DevBank.Entidades
             }
             if (option == "3")
             {
+                Console.Clear();
                 Console.WriteLine("Verificando saldo ....");
                 conta.RetornaSaldo();
                 Console.ReadKey();
             }
             if (option == "4")
             {
+                Console.Clear();
                 conta.InformacoesConta();
                 conta.Extrato();
                 Console.ReadKey();
             }
             if (option == "5")
             {
+                Console.Clear();
                 Console.WriteLine("Efetuando transferencia");
 
                 var contaDestino = sistema.ProcuraContaNaListaGeralDeContas(validacoes);
@@ -368,12 +394,14 @@ namespace DevBank.Entidades
 
             if (option == "6")
             {
+                Console.Clear();
                 conta.ValorChequeEspecial();
                 Console.ReadKey();
 
             }
             if (option == "7")
             {
+                Console.Clear();
                 Console.WriteLine("Alterar Dados");
                 conta.AlteraDados(validacoes);
                 Console.ReadKey();
