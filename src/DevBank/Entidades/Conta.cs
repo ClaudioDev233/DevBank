@@ -79,17 +79,14 @@ namespace DevBank
 
             var contaDestino = listaContas.ListaDeContas.FirstOrDefault(conta => conta.NumeroConta == numeroContaDestino);
 
-
             if (NumeroConta == contaDestino.NumeroConta)
             {
                 throw new Exception("Não é possível transferir para sua própria conta.");
-
             }
 
             if (valor > Saldo)
             {
                 throw new Exception("Saldo insuficiente.");
-
             }
 
             Saldo -= valor;

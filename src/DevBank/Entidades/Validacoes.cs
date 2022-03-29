@@ -15,15 +15,7 @@ namespace DevBank.Entidades
             return true;
             
         }
-        public dynamic? ValidaConta(string numeroConta)
-        {
-            if (numeroConta.Any(char.IsLetter) || numeroConta.Any(char.IsWhiteSpace) || numeroConta == "")
-                return null;
-            var validaNumeroConta = Int32.TryParse(numeroConta, out int numeroContaValido);
-            if (validaNumeroConta == true)
-                return numeroContaValido;
-            return null;
-        }
+      
         public bool ValidaInteiro(string inteiro)
         {
             if (inteiro.Any(char.IsLetter) || inteiro.Any(char.IsWhiteSpace) || inteiro == "")
@@ -52,7 +44,7 @@ namespace DevBank.Entidades
         }
         
 
-        public bool validaCPF(string cpf)
+        public bool validaCPF(string cpf) // Essa validação foi retirada de : https://www.macoratti.net/11/09/c_val1.htm
         {
             if (cpf.Any(char.IsLetter) || cpf.Any(char.IsWhiteSpace) || cpf == "" || cpf == null)
                 throw new Exception("Cpf não foi digitado corretamente.");

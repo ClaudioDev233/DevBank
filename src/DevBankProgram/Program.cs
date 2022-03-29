@@ -96,7 +96,7 @@ while (true)
             sistema.RetornaContasNegativadas();
             Console.WriteLine("Pressione algo para retornar ao inicio");
             Console.ReadKey();
-        } //funciona
+        } 
         if (opt == "5")
         {
 

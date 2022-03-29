@@ -28,7 +28,7 @@ namespace DevBank.Entidades
         {
             ListaDeTransferencias = new List<Transferencia>();
         }
-        public void CriarConta(Validacoes validacao) 
+        public void CriarConta(Validacoes validacao)
         {
             Console.WriteLine("Ok, vamos criar uma nova conta!\n");
 
@@ -38,7 +38,7 @@ namespace DevBank.Entidades
             var validaNome = validacao.ValidaNome(nome);
             if (!validaNome)
             {
-                throw new Exception("Nome Invalido.\n");  
+                throw new Exception("Nome Invalido.\n");
             }
 
             Console.WriteLine("Por favor, digite seu endereço:\n");
@@ -80,7 +80,7 @@ namespace DevBank.Entidades
             if (tipoConta > 3 || tipoConta < 1)
             {
                 throw new Exception("Tipo conta escolhido não existe.\n");
-                
+
             }
 
             Console.WriteLine("Em qual agencia deseja abrir sua conta?\n");
@@ -93,9 +93,9 @@ namespace DevBank.Entidades
             if (agencia > 3 || agencia < 1)
             {
                 throw new Exception("Agencia não encontrada.\n");
-               
+
             }
-            
+
             if (tipoConta == 1)
             {
 
@@ -103,7 +103,7 @@ namespace DevBank.Entidades
                 ListaDeContas.Add(conta);
                 ListaDeContasCorrente.Add(conta);
                 Console.WriteLine("Conta Corrente criada com sucesso!\n");
-               
+
             }
             if (tipoConta == 2)
             {
@@ -112,7 +112,7 @@ namespace DevBank.Entidades
                 ListaDeContas.Add(conta);
                 ListaDeContasPoupanca.Add(conta);
                 Console.WriteLine("Conta Poupança criada com sucesso!\n");
-                
+
             }
             if (tipoConta == 3)
             {
@@ -123,16 +123,16 @@ namespace DevBank.Entidades
                 Console.WriteLine("Conta Investimento criada com sucesso!\n");
 
             }
-    
+
         }
         public void RetornaValorInvestimentos()
         {
-            if(ListaDeContasInvestimento.Count == 0)
-            throw new Exception("Não existem investimentos.\n");
+            if (ListaDeContasInvestimento.Count == 0)
+                throw new Exception("Não existem investimentos.\n");
 
-             var soma = ListaDeInvestimentos.Sum(investimento => investimento.ValorAplicado);
+            var soma = ListaDeInvestimentos.Sum(investimento => investimento.ValorAplicado);
             Console.WriteLine("O total do valor investido é:\n");
-            if(soma == 0)
+            if (soma == 0)
             {
                 throw new Exception($"{soma:C2}");
             }
@@ -143,7 +143,7 @@ namespace DevBank.Entidades
             if (ListaDeContas.Count == 0)
             {
                 throw new Exception("Não há contas no sistema!");
-                
+
             }
 
             Console.WriteLine($"No momento existem {ListaDeContas.Count} conta(s) registradas.\n");
@@ -173,7 +173,7 @@ namespace DevBank.Entidades
                         Console.WriteLine($"\tSaldo: {conta.Saldo:C2}.");
                         Console.WriteLine("--------------------------------\n");
                     }
-                   
+
                     break;
 
                 case "2":
@@ -216,30 +216,14 @@ namespace DevBank.Entidades
                     }
 
                     break;
-                    
+
 
 
                 default:
                     break;
             }
-            
-          
-        } 
-        public void RetornaTransferencias()
-        {
-            if (ListaDeTransferencias.Count == 0)
-                Console.Write("Não existem transações no sistema");
-            Console.WriteLine($"No momento existem {ListaDeTransferencias.Count} tranferencia(s) registradas:");
-            foreach (Transferencia transferencia in ListaDeTransferencias)
-            {
 
-                Console.WriteLine("--------------------------------");
-                Console.WriteLine($"\tProprietário: {transferencia.NumeroContaDestino}");
-                Console.WriteLine($"\tNumero da Conta: {transferencia.Valor}");
-                Console.WriteLine($"\tSaldo: {transferencia.Data}");
-                Console.WriteLine("--------------------------------\n");
 
-            }
         }
         public Conta? RetornaContaEspecifica(int numeroConta)
         {
@@ -272,14 +256,14 @@ namespace DevBank.Entidades
         }
         public void RetornaContasNegativadas()
         {
-            
+
             if (ListaDeContasCorrente.Count != 0)
             {
                 var listaContasNegativas = ListaDeContasCorrente.FindAll(contas => contas.Saldo < 0);
                 if (listaContasNegativas.Count == 0)
                 {
-                    
-                   throw new Exception ("Não existem contas negativas no sistema.");
+
+                    throw new Exception("Não existem contas negativas no sistema.");
                 }
 
                 Console.WriteLine($"No momento existe(m){listaContasNegativas.Count} conta(s) no sistema sendo elas: \n");
@@ -298,8 +282,8 @@ namespace DevBank.Entidades
             }
 
 
-            throw new Exception ("Não existem contas negativas no sistema.");
-           
+            throw new Exception("Não existem contas negativas no sistema.");
+
         }
         public void AddTranferencia(Transferencia transferencia)
         {
@@ -309,12 +293,13 @@ namespace DevBank.Entidades
         public void AddInvestimento(Investimento investimento)
         {
             if (investimento == null)
-            throw new Exception("Investimento não pode ser criado.");
-                ListaDeInvestimentos.Add(investimento);
+                throw new Exception("Investimento não pode ser criado.");
+            ListaDeInvestimentos.Add(investimento);
         }
+
         public void ListarTransacoesDeUmCliente(Conta conta)
         {
-                conta.Extrato();
+            conta.Extrato();
         }
         public dynamic? ProcuraContaNaListaGeralDeContas(Validacoes validacao)
         {
@@ -327,7 +312,7 @@ namespace DevBank.Entidades
             if (contaExiste == null)
             {
                 throw new Exception($"A conta de número {numeroConta} não existe no sistema.");
-                
+
             }
             return int.Parse(numeroConta);
         }
