@@ -102,7 +102,7 @@ namespace DevBank.Entidades
                 var conta = new ContaCorrente(nome, cpf, endereco, Decimal.Parse(rendaMensal), (Enum.AgenciasEnum)agencia, (Enum.TipoContaEnum)tipoConta, ListaDeContas.Count);
                 ListaDeContas.Add(conta);
                 ListaDeContasCorrente.Add(conta);
-                Console.WriteLine("Conta Corrente criada com sucesso!\n");
+                Console.WriteLine($"Conta Corrente criada com sucesso! A sua agencia é {(Enum.AgenciasEnum)agencia}.\n");
 
             }
             if (tipoConta == 2)
@@ -111,7 +111,7 @@ namespace DevBank.Entidades
                 var conta = new ContaPoupanca(nome, cpf, endereco, Decimal.Parse(rendaMensal), (Enum.AgenciasEnum)agencia, (Enum.TipoContaEnum)tipoConta, ListaDeContas.Count);
                 ListaDeContas.Add(conta);
                 ListaDeContasPoupanca.Add(conta);
-                Console.WriteLine("Conta Poupança criada com sucesso!\n");
+                Console.WriteLine($"Conta Poupança criada com sucesso! A sua agencia é {(Enum.AgenciasEnum)agencia}.\n");
 
             }
             if (tipoConta == 3)
@@ -120,7 +120,7 @@ namespace DevBank.Entidades
                 var conta = new ContaInvestimento(nome, cpf, endereco, Decimal.Parse(rendaMensal), (Enum.AgenciasEnum)agencia, (Enum.TipoContaEnum)tipoConta, ListaDeContas.Count);
                 ListaDeContas.Add(conta);
                 ListaDeContasInvestimento.Add(conta);
-                Console.WriteLine("Conta Investimento criada com sucesso!\n");
+                Console.WriteLine($"Conta Investimento criada com sucesso! A sua agencia é {(Enum.AgenciasEnum)agencia}.\n");
 
             }
 
