@@ -10,31 +10,31 @@ namespace DevBank.Entidades
     public class ContaInvestimento : Conta
     {
         public List<Investimento> ListaInvestimentos { get; private set; }
-      
 
-        public ContaInvestimento(string nome, string cPF, string endereco, decimal rendaMensal, AgenciasEnum agencia, TipoContaEnum tipoConta, int numeroConta) : base(nome, cPF, endereco, rendaMensal, agencia,tipoConta, numeroConta)
+
+        public ContaInvestimento(string nome, string cPF, string endereco, decimal rendaMensal, AgenciasEnum agencia, TipoContaEnum tipoConta, int numeroConta) : base(nome, cPF, endereco, rendaMensal, agencia, tipoConta, numeroConta)
         {
             ListaInvestimentos = new List<Investimento>();
         }
 
         public void LCI(decimal valorInvestido, DateTime dataSistema, int tempoDePermanencia)
         {
-       
+
             if (tempoDePermanencia < 6)
             {
 
-                throw new Exception("Não foi possível realizar a simulação, pois o tempo mínimo de permanência é de 6 meses") ;
+                throw new Exception("Não foi possível realizar a simulação, pois o tempo mínimo de permanência é de 6 meses");
             }
             var dataFimInvestimento = dataSistema.AddMonths((tempoDePermanencia));
             var diferencaEmDias = (dataFimInvestimento - dataSistema).Days;
-            var jurosPeloTempo = (decimal)Math.Pow(1 + 0.0214f/ 100, diferencaEmDias);
+            var jurosPeloTempo = (decimal)Math.Pow(1 + 0.0214f / 100, diferencaEmDias);
             decimal montante = valorInvestido * jurosPeloTempo;
-            Console.WriteLine($"O seu dinheiro renderá : {montante:c2} a uma taxa de 0.0214% ao dia.");
+            Console.WriteLine($"O seu investimento no valor de {valorInvestido:c2} renderá um total de : { montante - valorInvestido:c2}, ou aproximadamente {(montante - valorInvestido) / diferencaEmDias:c2} por dia.");
 
-        }  
+        }
         public void LCA(decimal valorInvestido, DateTime dataSistema, int tempoDePermanencia)
         {
-           
+
             if (tempoDePermanencia < 12)
             {
 
@@ -44,11 +44,11 @@ namespace DevBank.Entidades
             var diferencaEmDias = (dataFimInvestimento - dataSistema).Days;
             var jurosPeloTempo = (decimal)Math.Pow(1 + 0.0239F / 100, diferencaEmDias);
             decimal montante = valorInvestido * jurosPeloTempo;
-            Console.WriteLine($"O seu dinheiro renderá : {montante:c2}, a uma taxa de 0.0239% ao dia");
-        }        
+            Console.WriteLine($"O seu investimento no valor de {valorInvestido:c2} renderá um total de : { montante - valorInvestido:c2}, ou aproximadamente {(montante - valorInvestido) / diferencaEmDias:c2} por dia.");
+        }
         public void CDB(decimal valorInvestido, DateTime dataSistema, int tempoDePermanencia)
         {
-           
+
             if (tempoDePermanencia < 12)
             {
 
@@ -58,13 +58,13 @@ namespace DevBank.Entidades
             var diferencaEmDias = (dataFimInvestimento - dataSistema).Days;
             var jurosPeloTempo = (decimal)Math.Pow(1 + 0.0265F / 100, diferencaEmDias);
             decimal montante = valorInvestido * jurosPeloTempo;
-            Console.WriteLine($"O seu dinheiro renderá : {montante:c2}, a uma taxa de 0.0265% ao dia");
+            Console.WriteLine($"O seu investimento no valor de {valorInvestido:c2} renderá um total de : { montante - valorInvestido:c2}, ou aproximadamente {(montante - valorInvestido) / diferencaEmDias:c2} por dia.");
         }
         public void ListarInvestimento()
         {
             if (ListaInvestimentos.Count == 0)
                 throw new Exception("Não existem investimentos");
-            foreach(var investimento in ListaInvestimentos)
+            foreach (var investimento in ListaInvestimentos)
             {
                 Console.WriteLine(investimento.DataAplicacao);
                 Console.WriteLine(investimento.ValorAplicado);
